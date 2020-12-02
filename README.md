@@ -17,3 +17,8 @@ A simple API that serving a users AAA (Authentication, Authorization , Accountin
 * [Swagger](https://swagger.io/) - API Development
 for Everyone
 
+## What I Learn from this Project 
+On my journey to building this project I learned a few things like:
+
+1. Learn AA (Authentication, Authorization , Accounting) core concept
+2. Implement API with NodeJS and express
