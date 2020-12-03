@@ -13,6 +13,7 @@ A simple API that serving a users AAA (Authentication, Authorization , Accountin
 * [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript at Any Scale.
 * [Swagger](https://swagger.io/) - API Development
 for Everyone
+* [JWT](https://jwt.io/) - JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. 
 
 ## What I Learn from this Project 
 On my journey to building this project I learned a few things like:
