@@ -19,3 +19,7 @@ On my journey to building this project I learned a few things like:
 
 1. Learn AA (Authentication, Authorization , Accounting) core concept
 2. Implement API with NodeJS and express
+
+## License
+This project is licensed under the terms of the **MIT** license.
+>You can check out the full license [here](https://github.com/rasatmaja/zephyr-one/blob/main/LICENSE) 
