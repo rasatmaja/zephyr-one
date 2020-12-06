@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/rasatmaja/zephyr-one/issues"
   },
-  "homepage": "https://github.com/rasatmaja/zephyr-one#readme"
+  "homepage": "https://github.com/rasatmaja/zephyr-one#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
