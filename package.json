@@ -2,11 +2,10 @@
   "name": "zephyr-one",
   "version": "1.0.0",
   "description": "A simple API that serving a users AAA (Authentication, Authorization , Accounting) service.",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "dev": "nodemon src/app.js",
+    "dev": "nodemon src/app.ts",
     "build": "tsc -p"
   },
   "repository": {
