@@ -1,3 +1,10 @@
+/**
+ * Zephyr One - A simple API that serving a users AAA (Authentication, Authorization , Accounting) service.
+ * 
+ * @author Rasio Atmaja <contact@rasio.dev>
+ */
+
+
 import express, {Application, Request, Response, NextFunction} from 'express';
 
 // init express
