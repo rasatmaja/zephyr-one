@@ -12,8 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/rasatmaja/zephyr-one.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["AAA", "Authentication, Authorization , Accounting", "NodeJS", "ExpressJS", "TypeScript"],
+  "author": {
+    "name" : "Rasio Atmaja", 
+    "email" : "contact@rasio.dev", 
+    "url" : "https://rasio.dev/"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/rasatmaja/zephyr-one/issues"
