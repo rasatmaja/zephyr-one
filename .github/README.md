@@ -8,14 +8,22 @@
 ## Label Guideline
 
 ### Epic
-![](https://img.shields.io/badge/Epic:%20Business%20Flow-a44fd6)
 
+![](https://img.shields.io/badge/Epic:%20Business%20Flow-a44fd6)
+* a body of work that can be broken down into specific tasks (called user stories) based on the needs/
 ### Type
 
 ![](https://img.shields.io/badge/Type:%20User%20Story-5eb836)
+* A user story is an informal, general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer.
+
 ![](https://img.shields.io/badge/Type:%20Task-0c78b8)
+*  a piece of work that needs doing, usually in order to build toward a bigger story. As such, it does not have independent deliverable functionality or generate business value, and, unlike a story, it normally is not a vertical (end-to-end) slice.
+
 ![](https://img.shields.io/badge/Type:%20Spike-fb8a00)
+* a user story for which the team cannot estimate the effort needed. In such a case, it is better to run time-boxed research, exploration to learn about the issue or the possible solutions. 
+
 ![](https://img.shields.io/badge/Type:%20Bug-e5493a)
+* a represent holes in our understanding of how the feature or the existing product works, or is supposed to work
 
 ### Point
 ![](https://img.shields.io/badge/Point:%201-5a5a5a)
