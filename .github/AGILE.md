@@ -2,6 +2,8 @@
 > more info see this articles:
 * [Alfredo Torre](https://torre.me.uk/2019/03/28/using-github-as-project-management-platform/) - Using GitHub as your Agile Project management platform
 * [ZenHub](https://blog.zenhub.com/how-to-use-github-agile-project-management/) - GitHub for Project Management - How to Organize and Track Your Agile Processes
+* [Unito](https://unito.io/blog/github-projects-agile/) - 3 Easy Ways to Add Agile Methodology to Your GitHub Projects While Keeping Developers Happy
+* [PyBites](https://pybit.es/github-projects.html) - Use Github to Manage Your Projects in an Agile Way
 ---
 
 
