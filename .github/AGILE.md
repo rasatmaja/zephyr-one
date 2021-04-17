@@ -4,6 +4,7 @@
 * [ZenHub](https://blog.zenhub.com/how-to-use-github-agile-project-management/) - GitHub for Project Management - How to Organize and Track Your Agile Processes
 * [Unito](https://unito.io/blog/github-projects-agile/) - 3 Easy Ways to Add Agile Methodology to Your GitHub Projects While Keeping Developers Happy
 * [PyBites](https://pybit.es/github-projects.html) - Use Github to Manage Your Projects in an Agile Way
+* [Medium - Sameera Weerakoon](https://sameera17w.medium.com/how-to-write-a-user-story-for-an-api-product-7af6abd4ad2e) - How to Write a User Story for an API Product
 ---
 
 
@@ -16,7 +17,7 @@
 ### Type
 
 ![](https://img.shields.io/badge/Type:%20User%20Story-5eb836)
-* A user story is an informal, general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer.
+* A small (actually, the smallest) piece of work that represents some value to an end user and can be delivered during a sprint.
 
 ![](https://img.shields.io/badge/Type:%20Task-0c78b8)
 *  a piece of work that needs doing, usually in order to build toward a bigger story. As such, it does not have independent deliverable functionality or generate business value, and, unlike a story, it normally is not a vertical (end-to-end) slice.
