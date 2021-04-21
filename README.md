@@ -8,9 +8,6 @@ A simple API that serving a users AAA (Authentication, Authorization , Accountin
 
 ## Technologies
 
-* [NodeJS](https://nodejs.org/) - Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
-* [Express](https://expressjs.com/) - Fast, unopinionated, minimalist web framework for Node.js
-* [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript at Any Scale.
 * [Swagger](https://swagger.io/) - API Development
 for Everyone
 * [JWT](https://jwt.io/) - JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. 
