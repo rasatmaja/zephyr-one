@@ -1,12 +1,12 @@
 # Zephyr One
-A simple API that serving a users AAA (Authentication, Authorization , Accounting) service. The purpose of this project is create AAA service using NodeJS, express and using Typescript and also display a documentation of its API using Swagger UI. 
+A simple API that serving a users AAA (Authentication, Authorization , Accounting) service. The purpose of this project is create AAA service using Golang and also display a documentation of its API using Swagger UI. 
 
 ![](https://img.shields.io/badge/Version-1.0.0-informational?style=flat&logo=<LOGO_NAME>&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Build-Sucess-informational?style=flat&logo=<LOGO_NAME>&logoColor=white&color=2bbc8a)
 ---
 
 ## Technologies
-
+* [Golang](https://golang.org/) - Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.
 * [Swagger](https://swagger.io/) - API Development
 for Everyone
 * [JWT](https://jwt.io/) - JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. 
