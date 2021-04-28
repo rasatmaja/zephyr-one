@@ -10,6 +10,7 @@ A simple API that serving a users AAA (Authentication, Authorization , Accountin
 * [Swagger](https://swagger.io/) - API Development
 for Everyone
 * [JWT](https://jwt.io/) - JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. 
+* [PostgreSQL](https://www.postgresql.org/) -PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
 
 ## What I Learn from this Project 
 On my journey to building this project I learned a few things like:
