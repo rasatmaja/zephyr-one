@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/rasatmaja/zephyr-one/internal/server"
+)
 
 func main() {
 	fmt.Println(`
@@ -14,4 +18,5 @@ func main() {
              |_|            |___/                             
 
 	`)
+	server.Start()
 }
