@@ -17,6 +17,7 @@ for Everyone
 On my journey to building this project I learned a few things like:
 
 1. Learn AAA (Authentication, Authorization , Accounting) core concept
+2. Implement Fiber framework
 
 ## License
 This project is licensed under the terms of the **MIT** license.
