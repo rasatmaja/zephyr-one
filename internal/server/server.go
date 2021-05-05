@@ -1,6 +1,12 @@
 package server
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"fmt"
+	"os"
+	"os/signal"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 // App is struct that define server, repo, and all component app needs
 type App struct {
@@ -20,5 +26,16 @@ func (a *App) Start() {
 	a.server.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello from zephyr one")
 	})
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		<-c
+		fmt.Println("Gracefully shutting down...")
+		a.server.Shutdown()
+	}()
+
 	a.server.Listen(":3090")
+	fmt.Println("Running cleanup tasks...")
+	fmt.Println("Server Shutdown...")
 }
