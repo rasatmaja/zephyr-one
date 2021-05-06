@@ -25,11 +25,8 @@ func New() *App {
 
 // Start is a function to start server
 func (a *App) Start() {
-	a.server.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello from zephyr one")
-	})
 
-	a.server.Get("/hello", a.handler.HelloWorld)
+	a.InitializeRoute()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
