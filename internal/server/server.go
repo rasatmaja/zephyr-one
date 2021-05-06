@@ -6,18 +6,20 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/handler"
 )
 
 // App is struct that define server, repo, and all component app needs
 type App struct {
-	server *fiber.App
+	server  *fiber.App
+	handler *handler.Endpoint
 }
 
 // New is a function to initialize sever and its component
 func New() *App {
-	server := fiber.New()
 	return &App{
-		server: server,
+		server:  fiber.New(),
+		handler: handler.New(),
 	}
 }
 
@@ -27,10 +29,13 @@ func (a *App) Start() {
 		return c.SendString("Hello from zephyr one")
 	})
 
+	a.server.Get("/hello", a.handler.HelloWorld)
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
+		fmt.Println(" <- OS signal received")
 		fmt.Println("Gracefully shutting down...")
 		a.server.Shutdown()
 	}()
