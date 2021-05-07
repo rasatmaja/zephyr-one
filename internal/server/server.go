@@ -7,19 +7,29 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/handler"
+	"go.uber.org/zap"
 )
 
 // App is struct that define server, repo, and all component app needs
 type App struct {
 	server  *fiber.App
 	handler *handler.Endpoint
+	logger  *zap.Logger
 }
 
 // New is a function to initialize sever and its component
 func New() *App {
+
+	// setup logger
+	logger, err := zap.NewProduction()
+	if err != nil {
+		panic(err)
+	}
+
 	return &App{
 		server:  fiber.New(),
 		handler: handler.New(),
+		logger:  logger,
 	}
 }
 
@@ -34,6 +44,11 @@ func (a *App) Start() {
 		<-c
 		fmt.Println(" <- OS signal received")
 		fmt.Println("Gracefully shutting down...")
+
+		defer func() {
+			a.logger.Sync()
+		}()
+
 		err := a.server.Shutdown()
 		if err != nil {
 			panic(err)
