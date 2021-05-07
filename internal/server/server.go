@@ -34,10 +34,16 @@ func (a *App) Start() {
 		<-c
 		fmt.Println(" <- OS signal received")
 		fmt.Println("Gracefully shutting down...")
-		a.server.Shutdown()
+		err := a.server.Shutdown()
+		if err != nil {
+			panic(err)
+		}
 	}()
 
-	a.server.Listen(":3090")
+	err := a.server.Listen(":3090")
+	if err != nil {
+		panic(err)
+	}
 	fmt.Println("Running cleanup tasks...")
 	fmt.Println("Server Shutdown...")
 }
