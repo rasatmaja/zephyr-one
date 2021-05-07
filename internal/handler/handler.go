@@ -19,5 +19,6 @@ func New(log *logger.Logger) *Endpoint {
 
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
+	e.log.Log.Info("Endpoint Hello World Hit")
 	return c.SendString("Hello World")
 }
