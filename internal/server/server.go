@@ -20,10 +20,11 @@ type App struct {
 // New is a function to initialize sever and its component
 func New() *App {
 
+	log := logger.New()
 	return &App{
 		server:  fiber.New(),
-		handler: handler.New(),
-		logger:  logger.New(),
+		handler: handler.New(log),
+		logger:  log,
 	}
 }
 
