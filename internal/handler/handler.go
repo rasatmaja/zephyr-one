@@ -1,13 +1,20 @@
 package handler
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/logger"
+)
 
 // Endpoint ...
-type Endpoint struct{}
+type Endpoint struct {
+	log *logger.Logger
+}
 
 // New is afunction to create handle instance
-func New() *Endpoint {
-	return &Endpoint{}
+func New(log *logger.Logger) *Endpoint {
+	return &Endpoint{
+		log: log,
+	}
 }
 
 // HelloWorld ...
