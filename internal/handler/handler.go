@@ -11,11 +11,12 @@ type Endpoint struct {
 }
 
 // New is afunction to create handle instance
-func New(log *logger.Logger) *Endpoint {
-	return &Endpoint{
-		log: log,
-	}
+func New() *Endpoint {
+	return &Endpoint{}
 }
+
+// SetLogger is a function to set logger on handler
+func (e *Endpoint) SetLogger(log *logger.Logger) { e.log = log }
 
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
