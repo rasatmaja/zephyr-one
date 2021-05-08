@@ -12,6 +12,7 @@ for Everyone
 * [JWT](https://jwt.io/) - JSON Web Token (JWT) is a compact URL-safe means of representing claims to be transferred between two parties. 
 * [PostgreSQL](https://www.postgresql.org/) - PostgreSQL is a powerful, open source object-relational database system with over 30 years of active development that has earned it a strong reputation for reliability, feature robustness, and performance.
 * [Fiber](https://gofiber.io/) - Fiber is a Go web framework built on top of Fasthttp, the fastest HTTP engine for Go. It's designed to ease things up for fast development with zero memory allocation and performance in mind.
+* [Zap Logger](https://github.com/uber-go/zap) - Blazing fast, structured, leveled logging in Go.
 
 ## What I Learn from this Project 
 On my journey to building this project I learned a few things like:
