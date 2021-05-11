@@ -1,18 +1,21 @@
 package logger
 
-import "go.uber.org/zap"
+import (
+	"os"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+)
 
 // Logger is a trust to define logger object
-type Logger struct{ *zap.Logger }
+type Logger struct{ *zerolog.Logger }
 
 // New is a function to initialize zap logger
 func New() *Logger {
 	// setup logger
-	logger, err := zap.NewProduction()
-	if err != nil {
-		panic(err)
-	}
-	return &Logger{logger}
+	logger := log.Logger.With().Str("app", "zephyr-one").Logger()
+	logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	return &Logger{&logger}
 }
 
 // Sync ...
