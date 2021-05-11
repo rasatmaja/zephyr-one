@@ -20,6 +20,6 @@ func (e *Endpoint) SetLogger(log *logger.Logger) { e.log = log }
 
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
-	e.log.Info("Endpoint Hello World Hit")
+	e.log.Trace().Msg("Endpoint Hello World Hit")
 	return c.SendString("Hello World")
 }
