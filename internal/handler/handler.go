@@ -12,7 +12,10 @@ type Endpoint struct {
 
 // New is afunction to create handle instance
 func New() *Endpoint {
-	return &Endpoint{}
+	logger := logger.New()
+	return &Endpoint{
+		log: logger,
+	}
 }
 
 // HelloWorld ...
