@@ -45,10 +45,6 @@ func (a *App) Start() {
 		fmt.Println(" <- OS signal received")
 		fmt.Println("Gracefully shutting down...")
 
-		defer func() {
-			a.logger.Sync()
-		}()
-
 		err := a.server.Shutdown()
 		if err != nil {
 			panic(err)
