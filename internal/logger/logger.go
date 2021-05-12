@@ -13,7 +13,7 @@ type Logger struct{ *zerolog.Logger }
 // New is a function to initialize zap logger
 func New() *Logger {
 	// setup logger
-	logger := log.Logger.With().Str("app", "zephyr-one").Logger()
+	logger := log.Logger
 	logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	return &Logger{&logger}
 }
