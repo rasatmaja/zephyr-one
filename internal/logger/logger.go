@@ -17,8 +17,3 @@ func New() *Logger {
 	logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	return &Logger{&logger}
 }
-
-// Sync ...
-func (l *Logger) Sync() {
-	l.Sync()
-}
