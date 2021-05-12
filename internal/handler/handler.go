@@ -20,6 +20,7 @@ func New() *Endpoint {
 
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
-	e.log.Trace().Msg("Endpoint Hello World Hit")
+	fLog := e.log.With().Str("go", "handle").Str("func", "HelloWorld").Logger()
+	fLog.Trace().Msg("Endpoint Hello World Hit")
 	return c.SendString("Hello World")
 }
