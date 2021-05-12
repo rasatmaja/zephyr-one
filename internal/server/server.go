@@ -25,7 +25,6 @@ func New() *App {
 
 	// setup handler
 	handler := handler.New()
-	handler.SetLogger(log)
 
 	return &App{
 		server:  fiber.New(),

@@ -15,9 +15,6 @@ func New() *Endpoint {
 	return &Endpoint{}
 }
 
-// SetLogger is a function to set logger on handler
-func (e *Endpoint) SetLogger(log *logger.Logger) { e.log = log }
-
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
 	e.log.Trace().Msg("Endpoint Hello World Hit")
