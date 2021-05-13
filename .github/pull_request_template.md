@@ -1,5 +1,3 @@
-# **Generate RS512 pair keys**
-
 **Issues Number** : #387  
 
 **Pull request type** :  
