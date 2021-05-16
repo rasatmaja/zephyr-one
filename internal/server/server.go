@@ -6,6 +6,7 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/handler"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
@@ -22,6 +23,9 @@ func New() *App {
 
 	// setup logger
 	log := logger.New()
+
+	// setup config
+	_ = config.BuildConfig()
 
 	// setup handler
 	handler := handler.New()
