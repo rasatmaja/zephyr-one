@@ -1,7 +1,10 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"reflect"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -15,17 +18,22 @@ type Config struct {
 	ServerIdleTO  int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
 }
 
+// Viper ...
+type Viper struct {
+	*viper.Viper
+}
+
 // BuildConfig ...
 func BuildConfig() *Config {
 	cfg := &Config{}
 
-	vpr := viper.New()
+	vpr := Viper{viper.New()}
 	vpr.AddConfigPath(".")
 	vpr.SetConfigName("app")
 	vpr.SetConfigType("env")
 
 	vpr.AutomaticEnv()
-	vpr.BindEnv("server_port")
+	vpr.bindenvs(cfg)
 
 	if err := vpr.ReadInConfig(); err != nil && !os.IsNotExist(err) {
 		panic(err)
@@ -37,5 +45,34 @@ func BuildConfig() *Config {
 
 	vpr.Debug()
 
+	fmt.Println(cfg)
 	return cfg
+}
+
+// bindenvs: workaround to make the unmarshal work with environment variables
+// Inspired from solution found here : https://github.com/spf13/viper/issues/188#issuecomment-399884438
+// reference: https://github.com/spf13/viper/issues/761#issuecomment-626122696
+func (b *Viper) bindenvs(iface interface{}, parts ...string) {
+	ifv := reflect.ValueOf(iface)
+	if ifv.Kind() == reflect.Ptr {
+		ifv = ifv.Elem()
+	}
+	for i := 0; i < ifv.NumField(); i++ {
+		v := ifv.Field(i)
+		t := ifv.Type().Field(i)
+		tv, ok := t.Tag.Lookup("mapstructure")
+		if !ok {
+			continue
+		}
+		if tv == ",squash" {
+			b.bindenvs(v.Interface(), parts...)
+			continue
+		}
+		switch v.Kind() {
+		case reflect.Struct:
+			b.bindenvs(v.Interface(), append(parts, tv)...)
+		default:
+			b.BindEnv(strings.Join(append(parts, tv), "."))
+		}
+	}
 }
