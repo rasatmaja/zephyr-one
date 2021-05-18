@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"sync"
 
@@ -52,8 +51,5 @@ func (cfg *Config) BuildENV() *ENV {
 		cfg.log.Panic().Msg(err.Error())
 	}
 
-	vpr.Debug()
-
-	fmt.Println(env)
 	return env
 }
