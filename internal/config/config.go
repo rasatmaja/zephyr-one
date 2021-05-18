@@ -3,11 +3,13 @@ package config
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
 var instance *ENV
+var singleton sync.Once
 
 // Config ...
 type Config struct{ log *logger.Logger }
@@ -23,8 +25,10 @@ type ENV struct {
 
 // LoadENV ...
 func LoadENV() *ENV {
-	config := &Config{log: logger.New()}
-	instance = config.BuildENV()
+	singleton.Do(func() {
+		config := &Config{log: logger.New()}
+		instance = config.BuildENV()
+	})
 	return instance
 }
 
