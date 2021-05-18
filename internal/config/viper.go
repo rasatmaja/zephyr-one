@@ -41,3 +41,12 @@ func (vpr *Viper) BindEnvs(iface interface{}, parts ...string) {
 		}
 	}
 }
+
+// IsFileNotFoundError is a funtion warper to check error file not found
+func (vpr *Viper) IsFileNotFoundError(err error) bool {
+	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		// Config file not found; ignore error if desired
+		return true
+	}
+	return false
+}

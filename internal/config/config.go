@@ -1,7 +1,6 @@
 package config
 
 import (
-	"os"
 	"sync"
 
 	"github.com/rasatmaja/zephyr-one/internal/logger"
@@ -43,12 +42,16 @@ func (cfg *Config) BuildENV() *ENV {
 	vpr.AutomaticEnv()
 	vpr.BindEnvs(env)
 
-	if err := vpr.ReadInConfig(); err != nil && !os.IsNotExist(err) {
-		cfg.log.Panic().Msg(err.Error())
+	if err := vpr.ReadInConfig(); err != nil {
+		if vpr.IsFileNotFoundError(err) {
+			cfg.log.Warn().Msg("file app.env not found on root directory, using system variable")
+		} else {
+			cfg.log.Fatal().Msgf("cannot read config, got: %s", err)
+		}
 	}
 
-	if err := vpr.Unmarshal(&env); err != nil && !os.IsNotExist(err) {
-		cfg.log.Panic().Msg(err.Error())
+	if err := vpr.Unmarshal(&env); err != nil {
+		cfg.log.Fatal().Msgf("Cannot unmarshal config, got: %s", err)
 	}
 
 	return env
