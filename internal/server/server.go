@@ -25,7 +25,7 @@ func New() *App {
 	log := logger.New()
 
 	// setup config
-	_ = config.BuildConfig()
+	_ = config.LoadENV()
 
 	// setup handler
 	handler := handler.New()
