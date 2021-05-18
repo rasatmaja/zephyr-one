@@ -7,10 +7,13 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
-var log *logger.Logger
+var instance *ENV
 
 // Config ...
-type Config struct {
+type Config struct{ log *logger.Logger }
+
+// ENV is a stuct to hold all environemnt variable for this app
+type ENV struct {
 	ServerHost    string `mapstructure:"SERVER_HOST"`
 	ServerPort    int    `mapstructure:"SERVER_PORT"`
 	ServerReadTO  int    `mapstructure:"SERVER_READ_TIMEOUT"`
@@ -18,13 +21,16 @@ type Config struct {
 	ServerIdleTO  int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
 }
 
-func init() {
-	log = logger.New()
+// LoadENV ...
+func LoadENV() *ENV {
+	config := &Config{log: logger.New()}
+	instance = config.BuildENV()
+	return instance
 }
 
-// BuildConfig ...
-func BuildConfig() *Config {
-	cfg := &Config{}
+// BuildENV ...
+func (cfg *Config) BuildENV() *ENV {
+	env := &ENV{}
 
 	vpr := GetViper()
 	vpr.AddConfigPath(".")
@@ -32,18 +38,18 @@ func BuildConfig() *Config {
 	vpr.SetConfigType("env")
 
 	vpr.AutomaticEnv()
-	vpr.BindEnvs(cfg)
+	vpr.BindEnvs(env)
 
 	if err := vpr.ReadInConfig(); err != nil && !os.IsNotExist(err) {
-		log.Panic().Msg(err.Error())
+		cfg.log.Panic().Msg(err.Error())
 	}
 
-	if err := vpr.Unmarshal(&cfg); err != nil && !os.IsNotExist(err) {
-		log.Panic().Msg(err.Error())
+	if err := vpr.Unmarshal(&env); err != nil && !os.IsNotExist(err) {
+		cfg.log.Panic().Msg(err.Error())
 	}
 
 	vpr.Debug()
 
-	fmt.Println(cfg)
-	return cfg
+	fmt.Println(env)
+	return env
 }
