@@ -16,6 +16,7 @@ type App struct {
 	server  *fiber.App
 	handler *handler.Endpoint
 	logger  *logger.Logger
+	env     *config.ENV
 }
 
 // New is a function to initialize sever and its component
@@ -25,7 +26,7 @@ func New() *App {
 	log := logger.New()
 
 	// setup config
-	_ = config.LoadENV()
+	env := config.LoadENV()
 
 	// setup handler
 	handler := handler.New()
@@ -34,6 +35,7 @@ func New() *App {
 		server:  fiber.New(),
 		handler: handler,
 		logger:  log,
+		env:     env,
 	}
 }
 
@@ -55,7 +57,7 @@ func (a *App) Start() {
 		}
 	}()
 
-	err := a.server.Listen(":3090")
+	err := a.server.Listen(fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort))
 	if err != nil {
 		panic(err)
 	}
