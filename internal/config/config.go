@@ -1,16 +1,15 @@
 package config
 
 import (
+	"fmt"
 	"sync"
-
-	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
 var instance *ENV
 var singleton sync.Once
 
 // Config ...
-type Config struct{ log *logger.Logger }
+type Config struct{}
 
 // ENV is a stuct to hold all environemnt variable for this app
 type ENV struct {
@@ -24,7 +23,7 @@ type ENV struct {
 // LoadENV ...
 func LoadENV() *ENV {
 	singleton.Do(func() {
-		config := &Config{log: logger.New()}
+		config := &Config{}
 		instance = config.BuildENV()
 	})
 	return instance
@@ -44,14 +43,14 @@ func (cfg *Config) BuildENV() *ENV {
 
 	if err := vpr.ReadInConfig(); err != nil {
 		if vpr.IsFileNotFoundError(err) {
-			cfg.log.Warn().Msg("file app.env not found on root directory, using system variable")
+			fmt.Println("file app.env not found on root directory, using system variable")
 		} else {
-			cfg.log.Fatal().Msgf("cannot read config, got: %s", err)
+			panic(err)
 		}
 	}
 
 	if err := vpr.Unmarshal(&env); err != nil {
-		cfg.log.Fatal().Msgf("Cannot unmarshal config, got: %s", err)
+		panic(err)
 	}
 
 	return env
