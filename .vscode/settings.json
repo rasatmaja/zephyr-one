@@ -1,0 +1,11 @@
+{
+    "go.useLanguageServer": true,
+    "go.testFlags": [
+        "-v",
+        "-count=1"
+    ],
+    "go.coverOnSave": false,
+    "go.coverOnSingleTest": true,
+    "go.lintTool": "golint",
+    "go.toolsManagement.autoUpdate": true,
+}
