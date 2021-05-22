@@ -51,7 +51,7 @@ func (cfg *Config) BuildENV() *ENV {
 
 	if err := vpr.ReadInConfig(); err != nil {
 		if vpr.IsFileNotFoundError(err) {
-			fmt.Println("file app.env not found on root directory, using system variable")
+			fmt.Println("[ CNFG ] File app.env not found on root directory, using system variable")
 		} else {
 			panic(err)
 		}
