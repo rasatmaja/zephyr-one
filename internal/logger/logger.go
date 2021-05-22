@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"os"
 	"sync"
 
@@ -19,11 +20,16 @@ type Logger struct{ *zerolog.Logger }
 func New() *Logger {
 	singleton.Do(func() {
 		// setup config env
-		_ = config.LoadENV()
+		env := config.LoadENV()
 
-		// setup logger
+		// init logger: zerolog
 		logger := log.Logger
-		logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+
+		fmt.Printf("[LOGGER] Set logger output to %s \n", env.LogOutput)
+		switch env.LogOutput {
+		case "CMD":
+			logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+		}
 
 		instance = &Logger{&logger}
 	})
