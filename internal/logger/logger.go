@@ -30,14 +30,14 @@ func New() *Logger {
 		case "CMD":
 			logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 		}
-		fmt.Printf("[LOGGER] Set logger output to %s \n", env.LogOutput)
+		fmt.Printf("[ LGGR ] Set logger output to %s \n", env.LogOutput)
 
 		lvl, err := zerolog.ParseLevel(strings.ToLower(env.LogLevel))
 		if err != nil {
 			panic(err)
 		}
 		logger = logger.Level(lvl)
-		fmt.Printf("[LOGGER] Set logger level to %s \n", env.LogLevel)
+		fmt.Printf("[ LGGR ] Set logger level to %s \n", env.LogLevel)
 
 		instance = &Logger{&logger}
 	})
