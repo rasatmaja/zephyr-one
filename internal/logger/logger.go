@@ -3,6 +3,7 @@ package logger
 import (
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/rasatmaja/zephyr-one/internal/config"
@@ -25,11 +26,18 @@ func New() *Logger {
 		// init logger: zerolog
 		logger := log.Logger
 
-		fmt.Printf("[LOGGER] Set logger output to %s \n", env.LogOutput)
 		switch env.LogOutput {
 		case "CMD":
 			logger = logger.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 		}
+		fmt.Printf("[LOGGER] Set logger output to %s \n", env.LogOutput)
+
+		lvl, err := zerolog.ParseLevel(strings.ToLower(env.LogLevel))
+		if err != nil {
+			panic(err)
+		}
+		logger = logger.Level(lvl)
+		fmt.Printf("[LOGGER] Set logger level to %s \n", env.LogLevel)
 
 		instance = &Logger{&logger}
 	})
