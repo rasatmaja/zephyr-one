@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/config"
@@ -31,8 +32,17 @@ func New() *App {
 	// setup handler
 	handler := handler.New()
 
+	// setup server
+	svr := fiber.New(
+		fiber.Config{
+			ReadTimeout:  time.Duration(env.ServerReadTO) * time.Second,
+			WriteTimeout: time.Duration(env.ServerWriteTO) * time.Second,
+			IdleTimeout:  time.Duration(env.ServerIdleTO) * time.Second,
+		},
+	)
+
 	return &App{
-		server:  fiber.New(),
+		server:  svr,
 		handler: handler,
 		logger:  log,
 		env:     env,
