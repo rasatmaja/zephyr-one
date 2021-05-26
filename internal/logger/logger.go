@@ -34,10 +34,13 @@ func New() *Logger {
 
 		lvl, err := zerolog.ParseLevel(strings.ToLower(env.LogLevel))
 		if err != nil {
-			panic(err)
+			fmt.Printf("[ LGGR ] Error parse level, got: %s \n", err)
+
+			lvl = zerolog.TraceLevel
+			fmt.Println("[ LGGR ] Switch level to TRACE")
 		}
 		logger = logger.Level(lvl)
-		fmt.Printf("[ LGGR ] Set logger level to %s \n", env.LogLevel)
+		fmt.Printf("[ LGGR ] Set logger level to %s \n", logger.GetLevel())
 
 		instance = &Logger{&logger}
 	})
