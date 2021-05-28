@@ -22,12 +22,12 @@ func New(app *fiber.App) *App {
 	return instance
 }
 
-// InizializedMiddleware is a function to register and inizialize middleware func
-func (mdlwr *App) InizializedMiddleware() {
+// InitializeMiddleware is a function to register and initialize middleware func
+func (mdlwr *App) InitializeMiddleware() {
 	mdlwr.PageNotfound()
 }
 
-// PageNotfound is a function to inizialized 404 page not found page as a midleware
+// PageNotfound is a function to initialize 404 page not found page as a midleware
 func (mdlwr *App) PageNotfound() {
 	fmt.Println("[ MDWR ] Initialize 404 page notfound middleware")
 	mdlwr.Use(func(c *fiber.Ctx) error {
