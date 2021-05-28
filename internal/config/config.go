@@ -28,6 +28,7 @@ type ENV struct {
 // LoadENV ...
 func LoadENV() *ENV {
 	singleton.Do(func() {
+		fmt.Println("[ CNFG ] Starting ENV config ...")
 		config := &Config{}
 		instance = config.BuildENV()
 	})

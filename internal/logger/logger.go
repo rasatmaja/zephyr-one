@@ -20,6 +20,7 @@ type Logger struct{ *zerolog.Logger }
 // New is a function to initialize zap logger
 func New() *Logger {
 	singleton.Do(func() {
+		fmt.Println("[ LGGR ] Starting Logger ...")
 		// setup config env
 		env := config.LoadENV()
 

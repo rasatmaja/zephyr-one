@@ -59,7 +59,7 @@ func New() *App {
 func (a *App) Start() {
 
 	a.InitializeRoute()
-	a.InizializedMiddleware()
+	a.InitializeMiddleware()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
@@ -82,7 +82,7 @@ func (a *App) Start() {
 	fmt.Println("Server Shutdown...")
 }
 
-// InizializedMiddleware is a function to start middleware
-func (a *App) InizializedMiddleware() {
-	a.middleware.InizializedMiddleware()
+// InitializeMiddleware is a function to start middleware
+func (a *App) InitializeMiddleware() {
+	a.middleware.InitializeMiddleware()
 }
