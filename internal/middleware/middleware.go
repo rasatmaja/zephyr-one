@@ -16,7 +16,7 @@ type App struct{ *fiber.App }
 // New is a function to initialize middleware
 func New(app *fiber.App) *App {
 	singleton.Do(func() {
-		fmt.Println("[ MDWR ] Initialize middleware core")
+		fmt.Println("[ MDWR ] Starting middleware core ...")
 		instance = &App{app}
 	})
 	return instance
