@@ -10,14 +10,16 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/handler"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
+	"github.com/rasatmaja/zephyr-one/internal/middleware"
 )
 
 // App is struct that define server, repo, and all component app needs
 type App struct {
-	server  *fiber.App
-	handler *handler.Endpoint
-	logger  *logger.Logger
-	env     *config.ENV
+	server     *fiber.App
+	handler    *handler.Endpoint
+	logger     *logger.Logger
+	env        *config.ENV
+	middleware *middleware.App
 }
 
 // New is a function to initialize sever and its component
@@ -41,11 +43,15 @@ func New() *App {
 		},
 	)
 
+	// setup middleware
+	mdlwre := middleware.New(svr)
+
 	return &App{
-		server:  svr,
-		handler: handler,
-		logger:  log,
-		env:     env,
+		server:     svr,
+		handler:    handler,
+		logger:     log,
+		env:        env,
+		middleware: mdlwre,
 	}
 }
 
@@ -53,6 +59,7 @@ func New() *App {
 func (a *App) Start() {
 
 	a.InitializeRoute()
+	a.InizializedMiddleware()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
@@ -73,4 +80,9 @@ func (a *App) Start() {
 	}
 	fmt.Println("Running cleanup tasks...")
 	fmt.Println("Server Shutdown...")
+}
+
+// InizializedMiddleware is a function to start middleware
+func (a *App) InizializedMiddleware() {
+	a.middleware.InizializedMiddleware()
 }
