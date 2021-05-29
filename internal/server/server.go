@@ -58,8 +58,8 @@ func New() *App {
 // Start is a function to start server
 func (a *App) Start() {
 
-	a.InitializeRoute()
 	a.InitializeMiddleware()
+	a.InitializeRoute()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)

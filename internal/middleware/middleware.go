@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/pkg/helper"
 )
 
 var instance *App
@@ -24,7 +25,8 @@ func New(app *fiber.App) *App {
 
 // InitializeMiddleware is a function to register and initialize middleware func
 func (mdlwr *App) InitializeMiddleware() {
-	mdlwr.PageNotfound()
+	mdlwr.RequestID()
+	//mdlwr.PageNotfound()
 }
 
 // PageNotfound is a function to initialize 404 page not found page as a midleware
@@ -36,5 +38,18 @@ func (mdlwr *App) PageNotfound() {
 				"message": fmt.Sprintf("URL [%s] not found", c.Path()),
 			},
 		)
+	})
+}
+
+// RequestID is a function to initialize request id for http header as a midleware
+func (mdlwr *App) RequestID() {
+	fmt.Println("[ MDWR ] Initialize RequestID middleware")
+	mdlwr.Use(func(c *fiber.Ctx) error {
+		reqID := c.Get("X-Request-Id")
+		if len(reqID) == 0 {
+			reqID, _ = helper.GenerateRandomString(8)
+			c.Set("X-Request-Id", reqID)
+		}
+		return c.Next()
 	})
 }
