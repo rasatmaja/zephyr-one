@@ -23,8 +23,8 @@ func New(app *fiber.App) *App {
 	return instance
 }
 
-// InitializeMiddleware is a function to register and initialize middleware func
-func (mdlwr *App) InitializeMiddleware() {
+// Initialize is a function to register and initialize middleware func
+func (mdlwr *App) Initialize() {
 	mdlwr.RequestID()
 }
 

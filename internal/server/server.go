@@ -84,5 +84,5 @@ func (a *App) Start() {
 
 // InitializeMiddleware is a function to start middleware
 func (a *App) InitializeMiddleware() {
-	a.middleware.InitializeMiddleware()
+	a.middleware.Initialize()
 }
