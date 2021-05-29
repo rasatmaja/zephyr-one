@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/rasatmaja/zephyr-one/pkg/helper"
 )
 
@@ -26,6 +27,7 @@ func New(app *fiber.App) *App {
 // Initialize is a function to register and initialize middleware func
 func (mdlwr *App) Initialize() {
 	mdlwr.RequestID()
+	mdlwr.Recover()
 }
 
 // RequestID is a function to initialize request id for http header as a midleware
@@ -39,4 +41,10 @@ func (mdlwr *App) RequestID() {
 		}
 		return c.Next()
 	})
+}
+
+// Recover is a function to initialize recover as a midleware
+func (mdlwr *App) Recover() {
+	fmt.Println("[ MDWR ] Initialize Recover middleware")
+	mdlwr.Use(recover.New())
 }
