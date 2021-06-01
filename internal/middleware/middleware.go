@@ -27,6 +27,7 @@ func New(app *fiber.App) *App {
 // Initialize is a function to register and initialize middleware func
 func (mdlwr *App) Initialize() {
 	mdlwr.RequestID()
+	mdlwr.TransactionID()
 	mdlwr.Recover()
 }
 
@@ -47,4 +48,20 @@ func (mdlwr *App) RequestID() {
 func (mdlwr *App) Recover() {
 	fmt.Println("[ MDWR ] Initialize Recover middleware")
 	mdlwr.Use(recover.New())
+}
+
+// TransactionID is a function to initialize trasaction id for http header as a midleware
+// this header only appear on method POST, DELETE, and PUT (except GET)
+func (mdlwr *App) TransactionID() {
+	fmt.Println("[ MDWR ] Initialize Transaction ID middleware")
+	mdlwr.Use(func(c *fiber.Ctx) error {
+		if c.Method() != "GET" {
+			trxID := c.Get("X-Transaction-Id")
+			if len(trxID) == 0 {
+				trxID, _ = helper.GenerateRandomString(32)
+				c.Set("X-Transaction-Id", trxID)
+			}
+		}
+		return c.Next()
+	})
 }
