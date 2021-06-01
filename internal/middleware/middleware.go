@@ -3,6 +3,7 @@ package middleware
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
@@ -36,6 +37,7 @@ func New(app *fiber.App) *App {
 
 // Initialize is a function to register and initialize middleware func
 func (mdlwr *App) Initialize() {
+	mdlwr.ResponseTime()
 	mdlwr.RequestID()
 	mdlwr.TransactionID()
 	mdlwr.Recover()
@@ -74,4 +76,19 @@ func (mdlwr *App) TransactionID() {
 		}
 		return c.Next()
 	})
+}
+
+// ResponseTime is a middleware to track how much time it takes to process a request
+// This middlware only active if server not in production
+func (mdlwr *App) ResponseTime() {
+	if !mdlwr.env.ServerProduction {
+		fmt.Println("[ MDWR ] Initialize Response Time middleware")
+		mdlwr.server.Use(func(c *fiber.Ctx) error {
+			start := time.Now()
+			err := c.Next()
+			dur := time.Since(start).Milliseconds()
+			mdlwr.log.Trace().Msgf("Request [%s] done in %d ms", c.Path(), dur)
+			return err
+		})
+	}
 }

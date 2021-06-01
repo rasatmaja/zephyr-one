@@ -14,11 +14,12 @@ type Config struct{}
 // ENV is a stuct to hold all environemnt variable for this app
 type ENV struct {
 	// Server
-	ServerHost    string `mapstructure:"SERVER_HOST"`
-	ServerPort    int    `mapstructure:"SERVER_PORT"`
-	ServerReadTO  int    `mapstructure:"SERVER_READ_TIMEOUT"`
-	ServerWriteTO int    `mapstructure:"SERVER_WRITE_TIMEOUT"`
-	ServerIdleTO  int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
+	ServerHost       string `mapstructure:"SERVER_HOST"`
+	ServerPort       int    `mapstructure:"SERVER_PORT"`
+	ServerReadTO     int    `mapstructure:"SERVER_READ_TIMEOUT"`
+	ServerWriteTO    int    `mapstructure:"SERVER_WRITE_TIMEOUT"`
+	ServerIdleTO     int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
+	ServerProduction bool   `mapstructure:"SERVER_PRODUCTION"`
 
 	// LOG
 	LogLevel  string `mapstructure:"LOG_LEVEL"`  // TRACE, DEBUG, INFO, ERROR
@@ -38,8 +39,9 @@ func LoadENV() *ENV {
 // BuildENV ...
 func (cfg *Config) BuildENV() *ENV {
 	env := &ENV{
-		LogLevel:  "TRACE",
-		LogOutput: "CMD",
+		ServerProduction: false,
+		LogLevel:         "TRACE",
+		LogOutput:        "CMD",
 	}
 
 	vpr := GetViper()
