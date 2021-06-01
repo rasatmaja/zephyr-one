@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/pkg/helper"
 )
@@ -17,6 +18,7 @@ var singleton sync.Once
 type App struct {
 	server *fiber.App
 	log    *logger.Logger
+	env    *config.ENV
 }
 
 // New is a function to initialize middleware
@@ -26,6 +28,7 @@ func New(app *fiber.App) *App {
 		instance = &App{
 			server: app,
 			log:    logger.New(),
+			env:    config.LoadENV(),
 		}
 	})
 	return instance
