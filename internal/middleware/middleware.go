@@ -41,6 +41,7 @@ func (mdlwr *App) Initialize() {
 	mdlwr.RequestID()
 	mdlwr.TransactionID()
 	mdlwr.Recover()
+	mdlwr.SwaggerUI()
 }
 
 // RequestID is a function to initialize request id for http header as a midleware
