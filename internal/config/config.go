@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"sync"
 )
 
@@ -54,7 +55,9 @@ func (cfg *Config) BuildENV() *ENV {
 
 	if err := vpr.ReadInConfig(); err != nil {
 		if vpr.IsFileNotFoundError(err) {
-			fmt.Println("[ CNFG ] File app.env not found on root directory, using system variable")
+			pwd, _ := os.Getwd()
+			fmt.Printf("[ CNFG ] File app.env not found on '%s',\n", pwd)
+			fmt.Println("[ CNFG ] Using system variable")
 		} else {
 			panic(err)
 		}
