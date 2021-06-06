@@ -65,8 +65,8 @@ func (a *App) Start() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
-		fmt.Println(" <- OS signal received")
-		fmt.Println("Gracefully shutting down...")
+		fmt.Println(" :: OS signal received")
+		fmt.Println("[ SRVR ] Gracefully shutting down...")
 
 		err := a.server.Shutdown()
 		if err != nil {
@@ -78,8 +78,8 @@ func (a *App) Start() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Running cleanup tasks...")
-	fmt.Println("Server Shutdown...")
+	fmt.Println("[ SRVR ] Running cleanup tasks...")
+	fmt.Println("[ SRVR ] Server Shutdown...")
 }
 
 // InitializeMiddleware is a function to start middleware

@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// InitializeRoute ...
+// InitializeRoute is a function to define routes and it's handlers
 func (a *App) InitializeRoute() {
 	fLog := a.logger.With().Str("func", "InitializeRoute").Str("go", "router").Logger()
 	defer a.server.Use(a.handler.PageNotfound)
