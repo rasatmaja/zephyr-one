@@ -61,12 +61,30 @@ func (a *App) Start() {
 	a.InitializeMiddleware()
 	a.InitializeRoute()
 
+	a.InitializeShutdownSequence()
+	defer fmt.Println("[ SRVR ] Server Shutdown...")
+
+	a.ServerListen()
+
+}
+
+// ServerListen is a function to initialize server listen
+func (a *App) ServerListen() {
+	err := a.server.Listen(fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort))
+	if err != nil {
+		panic(err)
+	}
+}
+
+// InitializeShutdownSequence is a function initialize shutdown sequence
+func (a *App) InitializeShutdownSequence() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		<-c
 		fmt.Println(" :: OS signal received")
 		fmt.Println("[ SRVR ] Gracefully shutting down...")
+		fmt.Println("[ SRVR ] Running cleanup tasks...")
 
 		err := a.server.Shutdown()
 		if err != nil {
@@ -74,12 +92,6 @@ func (a *App) Start() {
 		}
 	}()
 
-	err := a.server.Listen(fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort))
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("[ SRVR ] Running cleanup tasks...")
-	fmt.Println("[ SRVR ] Server Shutdown...")
 }
 
 // InitializeMiddleware is a function to start middleware
