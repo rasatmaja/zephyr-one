@@ -22,6 +22,9 @@ type ENV struct {
 	ServerIdleTO     int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
 	ServerProduction bool   `mapstructure:"SERVER_PRODUCTION"`
 
+	//TLS
+	TLS bool `mapstructure:"TLS"`
+
 	// LOG
 	LogLevel  string `mapstructure:"LOG_LEVEL"`  // TRACE, DEBUG, INFO, ERROR
 	LogOutput string `mapstructure:"LOG_OUTPUT"` // CMD, JSON

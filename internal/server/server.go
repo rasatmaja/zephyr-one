@@ -70,7 +70,18 @@ func (a *App) Start() {
 
 // ServerListen is a function to initialize server listen
 func (a *App) ServerListen() {
-	err := a.server.Listen(fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort))
+
+	var err error
+	host := fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort)
+
+	if a.env.TLS {
+		cert := a.GenerateSelfSignedCertificates()
+		fmt.Println("[ SRVR ] Server using self-signed certificate")
+		err = a.server.ListenTLS(host, cert.CertPath, cert.KeyPath)
+	} else {
+		err = a.server.Listen(host)
+	}
+
 	if err != nil {
 		panic(err)
 	}
@@ -85,6 +96,9 @@ func (a *App) InitializeShutdownSequence() {
 		fmt.Println(" :: OS signal received")
 		fmt.Println("[ SRVR ] Gracefully shutting down...")
 		fmt.Println("[ SRVR ] Running cleanup tasks...")
+
+		os.Remove("cert.pem")
+		os.Remove("key.pem")
 
 		err := a.server.Shutdown()
 		if err != nil {
