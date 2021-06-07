@@ -2,8 +2,6 @@ package server
 
 import (
 	"fmt"
-	"os"
-	"os/signal"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -76,6 +74,11 @@ func (a *App) ServerListen() {
 
 	if a.env.TLS {
 		cert := a.GenerateSelfSignedCertificates()
+
+		// Register certificate to asset registry for cleanup
+		a.RegisterAssets(Assets{Path: cert.CertPath, Type: AssetFile})
+		a.RegisterAssets(Assets{Path: cert.KeyPath, Type: AssetFile})
+
 		fmt.Println("[ SRVR ] Server using self-signed certificate")
 		err = a.server.ListenTLS(host, cert.CertPath, cert.KeyPath)
 	} else {
@@ -85,27 +88,6 @@ func (a *App) ServerListen() {
 	if err != nil {
 		panic(err)
 	}
-}
-
-// InitializeShutdownSequence is a function initialize shutdown sequence
-func (a *App) InitializeShutdownSequence() {
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func() {
-		<-c
-		fmt.Println(" :: OS signal received")
-		fmt.Println("[ SRVR ] Gracefully shutting down...")
-		fmt.Println("[ SRVR ] Running cleanup tasks...")
-
-		os.Remove("cert.pem")
-		os.Remove("key.pem")
-
-		err := a.server.Shutdown()
-		if err != nil {
-			panic(err)
-		}
-	}()
-
 }
 
 // InitializeMiddleware is a function to start middleware
