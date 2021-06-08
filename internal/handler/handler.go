@@ -35,3 +35,15 @@ func (e *Endpoint) PageNotfound(c *fiber.Ctx) error {
 		},
 	)
 }
+
+func (e *Endpoint) Base(c *fiber.Ctx) error {
+	fLog := e.log.With().Str("go", "handler").Str("func", "HelloWorld").Logger()
+	if c.Method() == fiber.MethodPost {
+		fLog.Trace().Msg("Base URL POST Hit")
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"message": "Hello from Zephyr One",
+		})
+	}
+	fLog.Trace().Msg("Base URL Hit")
+	return c.SendString("Hello from zephyr one")
+}
