@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
@@ -41,6 +42,7 @@ func (mdlwr *App) Initialize() {
 	mdlwr.RequestID()
 	mdlwr.TransactionID()
 	mdlwr.Recover()
+	mdlwr.Profiling()
 	mdlwr.SwaggerUI()
 }
 
@@ -90,6 +92,23 @@ func (mdlwr *App) ResponseTime() {
 			dur := time.Since(start).Milliseconds()
 			mdlwr.log.Trace().Msgf("Request [%s] done in %d ms", c.Path(), dur)
 			return err
+		})
+	}
+}
+
+// Profiling is a midlleware to attach pprof into server
+func (mdlwr *App) Profiling() {
+	fmt.Println("[ MDWR ] Initialize Profilling middleware")
+	if !mdlwr.env.ServerProduction {
+		mdlwr.server.Use(pprof.New())
+
+		// redirect into pprof
+		mdlwr.server.Get("/debug", func(c *fiber.Ctx) error {
+			slashPresent := c.Path()[len(c.Path())-1:] == "/"
+			if slashPresent {
+				return c.Redirect("pprof")
+			}
+			return c.Redirect("debug/pprof")
 		})
 	}
 }
