@@ -9,6 +9,7 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/handler"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/middleware"
+	"github.com/rasatmaja/zephyr-one/internal/utils"
 )
 
 // App is struct that define server, repo, and all component app needs
@@ -18,6 +19,7 @@ type App struct {
 	logger     *logger.Logger
 	env        *config.ENV
 	middleware *middleware.App
+	utils      *utils.Registry
 }
 
 // New is a function to initialize sever and its component
@@ -31,6 +33,9 @@ func New() *App {
 
 	// setup handler
 	handler := handler.New()
+
+	// setup utils
+	utils := utils.New()
 
 	// setup server
 	svr := fiber.New(
@@ -50,6 +55,7 @@ func New() *App {
 		logger:     log,
 		env:        env,
 		middleware: mdlwre,
+		utils:      utils,
 	}
 }
 
@@ -76,8 +82,8 @@ func (a *App) ServerListen() {
 		cert := a.GenerateSelfSignedCertificates()
 
 		// Register certificate to asset registry for cleanup
-		a.RegisterAssets(Assets{Path: cert.CertPath, Type: AssetFile})
-		a.RegisterAssets(Assets{Path: cert.KeyPath, Type: AssetFile})
+		a.utils.Assets.Register(utils.Asset{Path: cert.CertPath, Type: utils.AssetFile})
+		a.utils.Assets.Register(utils.Asset{Path: cert.KeyPath, Type: utils.AssetFile})
 
 		fmt.Println("[ SRVR ] Server using self-signed certificate")
 		err = a.server.ListenTLS(host, cert.CertPath, cert.KeyPath)
