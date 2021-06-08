@@ -14,15 +14,15 @@ type Endpoint struct {
 
 // New is afunction to create handle instance
 func New() *Endpoint {
-	logger := logger.New()
+	log := logger.New()
 	return &Endpoint{
-		log: logger,
+		log: log,
 	}
 }
 
 // HelloWorld ...
 func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
-	fLog := e.log.With().Str("go", "handler").Str("func", "HelloWorld").Logger()
+	fLog := e.log.With().Str("func", "HelloWorld").Logger()
 	fLog.Trace().Msg("Endpoint Hello World Hit")
 	return c.SendString("Hello World")
 }
@@ -36,8 +36,9 @@ func (e *Endpoint) PageNotfound(c *fiber.Ctx) error {
 	)
 }
 
+// Base is a handler to handle base url "/"
 func (e *Endpoint) Base(c *fiber.Ctx) error {
-	fLog := e.log.With().Str("go", "handler").Str("func", "HelloWorld").Logger()
+	fLog := e.log.With().Str("func", "Base").Logger()
 	if c.Method() == fiber.MethodPost {
 		fLog.Trace().Msg("Base URL POST Hit")
 		return c.Status(fiber.StatusOK).JSON(fiber.Map{
