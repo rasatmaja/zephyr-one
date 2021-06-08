@@ -30,8 +30,8 @@ tags:
       description: Find out more about our store
       url: 'http://swagger.io'
 schemes:
-  - https
   - http
+  - https
 paths:
   /pet:
     post:
