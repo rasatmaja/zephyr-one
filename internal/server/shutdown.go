@@ -17,9 +17,6 @@ func (a *App) InitializeShutdownSequence() {
 		fmt.Println("[ SRVR ] Running cleanup tasks...")
 		a.utils.Assets.Cleanup()
 
-		err := a.server.Shutdown()
-		if err != nil {
-			panic(err)
-		}
+		a.server.Shutdown()
 	}()
 }
