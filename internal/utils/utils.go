@@ -11,6 +11,7 @@ var singleton sync.Once
 // Registry struct
 type Registry struct {
 	Assets *Assets
+	Cert   *Certificates
 }
 
 // New is a function to init utils struct
@@ -19,6 +20,7 @@ func New() *Registry {
 		fmt.Println("[ UTLS ] Initialize Utilities")
 		instance = &Registry{
 			Assets: &Assets{},
+			Cert:   &Certificates{},
 		}
 	})
 	return instance

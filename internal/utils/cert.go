@@ -1,4 +1,4 @@
-package server
+package utils
 
 import (
 	"crypto/ecdsa"
@@ -19,8 +19,11 @@ type Certificate struct {
 	KeyPath  string
 }
 
+// Certificates ...
+type Certificates struct{}
+
 // GenerateSelfSignedCertificates ...
-func (a *App) GenerateSelfSignedCertificates() *Certificate {
+func (a *Certificates) GenerateSelfSignedCertificates() *Certificate {
 	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to generate private key: %v", err))
