@@ -20,6 +20,7 @@ On my journey to building this project I learned a few things like:
 
 1. Learn AAA (Authentication, Authorization , Accounting) core concept
 2. Implement Fiber framework
+3. Using goembed on go 1.16 to embed swagger asset into go binary and serve it as HTTP filesystem
 
 ## License
 This project is licensed under the terms of the **MIT** license.
