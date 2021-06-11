@@ -10,7 +10,11 @@ var instance *ENV
 var singleton sync.Once
 
 // Config ...
-type Config struct{}
+type Config struct {
+	Filename string
+	Type     string
+	Path     string
+}
 
 // ENV is a stuct to hold all environemnt variable for this app
 type ENV struct {
@@ -34,7 +38,11 @@ type ENV struct {
 func LoadENV() *ENV {
 	singleton.Do(func() {
 		fmt.Println("[ CNFG ] Starting ENV config ...")
-		config := &Config{}
+		config := &Config{
+			Filename: "app",
+			Type:     "env",
+			Path:     ".",
+		}
 		instance = config.BuildENV()
 	})
 	return instance
@@ -49,9 +57,9 @@ func (cfg *Config) BuildENV() *ENV {
 	}
 
 	vpr := GetViper()
-	vpr.AddConfigPath(".")
-	vpr.SetConfigName("app")
-	vpr.SetConfigType("env")
+	vpr.AddConfigPath(cfg.Path)
+	vpr.SetConfigName(cfg.Filename)
+	vpr.SetConfigType(cfg.Type)
 
 	vpr.AutomaticEnv()
 	vpr.BindEnvs(env)
