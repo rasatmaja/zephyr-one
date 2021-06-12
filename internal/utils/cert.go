@@ -35,7 +35,9 @@ type ICertificates interface {
 type Cert struct {
 	BasePath        string
 	CertFilename    string
+	CertHeader      map[string]string
 	PrivKeyFilename string
+	PrivHeader      map[string]string
 	PubKeyFilename  string
 	Permission      fs.FileMode
 }
@@ -82,7 +84,7 @@ func (cert *Cert) GenerateCertificate(pub, priv interface{}, sn *big.Int) (certs
 
 // SaveCertToFile ...
 func (cert *Cert) SaveCertToFile(certs []byte) error {
-	pemCert := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certs})
+	pemCert := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certs, Headers: cert.CertHeader})
 	if pemCert == nil {
 		return fmt.Errorf("Failed to encode certificate to PEM")
 	}
@@ -93,7 +95,7 @@ func (cert *Cert) SaveCertToFile(certs []byte) error {
 	return nil
 }
 
-// SavePubKeyToFile ...
+// SavePubKeyToFile ... [Work-In Progress]
 func (cert *Cert) SavePubKeyToFile(pub interface{}) error { return nil }
 
 // SavePrivKeyToFile ...
@@ -104,7 +106,7 @@ func (cert *Cert) SavePrivKeyToFile(priv interface{}) error {
 	if err != nil {
 		return fmt.Errorf("Unable to marshal private key: %v", err)
 	}
-	pemKey := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privBytes})
+	pemKey := pem.EncodeToMemory(&pem.Block{Type: "PRIVATE KEY", Bytes: privBytes, Headers: cert.PrivHeader})
 	if pemKey == nil {
 		return fmt.Errorf("Failed to encode key to PEM")
 	}
