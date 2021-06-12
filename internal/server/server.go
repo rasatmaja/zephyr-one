@@ -79,7 +79,7 @@ func (a *App) ServerListen() {
 	host := fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort)
 
 	if a.env.TLS {
-		cert := a.utils.Cert.GenerateSelfSignedCertificates()
+		cert, _ := a.utils.Cert.GenerateSelfSignedCertificates()
 
 		// Register certificate to asset registry for cleanup
 		a.utils.Assets.Register(utils.Asset{Path: cert.CertPath, Type: utils.AssetFile})
