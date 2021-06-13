@@ -12,7 +12,7 @@ import (
 
 // Queries ...
 type Queries struct {
-	db database.IDatabase
+	db database.ISQL
 }
 
 // WithTx ..
@@ -23,7 +23,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 }
 
 // New is function to initialize progresql
-func New() {
+func New() *Queries {
 
 	databaseHost := "localhost"
 	databasePort := 5432
@@ -51,6 +51,10 @@ func New() {
 
 	if err := db.Ping(); err != nil {
 		panic(err)
+	}
+
+	return &Queries{
+		db: db,
 	}
 
 }
