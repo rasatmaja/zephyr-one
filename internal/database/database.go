@@ -8,6 +8,9 @@ import (
 	"time"
 
 	"github.com/rasatmaja/zephyr-one/internal/config"
+
+	// PostgreSQL Driver
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 // ISQL is a interface for database/sql

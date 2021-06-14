@@ -37,7 +37,7 @@ type ENV struct {
 	DatabaseType        string `mapstructure:"DB_TYPE"`
 	DatabaseMaxIDLE     int    `mapstructure:"DB_MAX_IDLE"`     // 25
 	DatabaseMaxOpen     int    `mapstructure:"DB_MAX_OPEN"`     // 25
-	DatabaseMaxLifetime int    `mapstructure:"DB_MAX_LIFETIME"` // IN SECOND
+	DatabaseMaxLifetime int    `mapstructure:"DB_MAX_LIFETIME"` // IN MINUTES
 
 	// DATABASE POSTGRESQL
 	DBPostgresHost     string `mapstructure:"DB_PG_HOST"`
