@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/rasatmaja/zephyr-one/internal/config"
 )
@@ -57,5 +58,10 @@ func OpenConn() (*sql.DB, error) {
 	if err != nil {
 		return nil, fmt.Errorf("cannot open connection, got: %v", err)
 	}
+
+	db.SetMaxOpenConns(env.DatabaseMaxOpen)
+	db.SetMaxIdleConns(env.DatabaseMaxIDLE)
+	db.SetConnMaxLifetime(time.Duration(env.DatabaseMaxLifetime) * time.Minute)
+
 	return db, nil
 }

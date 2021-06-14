@@ -34,7 +34,10 @@ type ENV struct {
 	LogOutput string `mapstructure:"LOG_OUTPUT"` // CMD, JSON
 
 	// DABATASE
-	DatabaseType string `mapstructure:"DB_TYPE"`
+	DatabaseType        string `mapstructure:"DB_TYPE"`
+	DatabaseMaxIDLE     int    `mapstructure:"DB_MAX_IDLE"`     // 25
+	DatabaseMaxOpen     int    `mapstructure:"DB_MAX_OPEN"`     // 25
+	DatabaseMaxLifetime int    `mapstructure:"DB_MAX_LIFETIME"` // IN SECOND
 
 	// DATABASE POSTGRESQL
 	DBPostgresHost     string `mapstructure:"DB_PG_HOST"`
