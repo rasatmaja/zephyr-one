@@ -32,6 +32,17 @@ type ENV struct {
 	// LOG
 	LogLevel  string `mapstructure:"LOG_LEVEL"`  // TRACE, DEBUG, INFO, ERROR
 	LogOutput string `mapstructure:"LOG_OUTPUT"` // CMD, JSON
+
+	// DABATASE
+	DatabaseType string `mapstructure:"DB_TYPE"`
+
+	// DATABASE POSTGRESQL
+	DBPostgresHost     string `mapstructure:"DB_PG_HOST"`
+	DBPostgresPort     int    `mapstructure:"DB_PG_PORT"`
+	DBPostgresUsername string `mapstructure:"DB_PG_USER"`
+	DBPostgresPassword string `mapstructure:"DB_PG_PASSWORD"`
+	DBPostgresDatabase string `mapstructure:"DB_PG_DATABASE"`
+	DBPostgresSSLMode  string `mapstructure:"DB_PG_SSLMODE"`
 }
 
 // LoadENV ...
