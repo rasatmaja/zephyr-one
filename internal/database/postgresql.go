@@ -1,4 +1,4 @@
-package postgresql
+package database
 
 import (
 	"database/sql"
@@ -10,8 +10,8 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/config"
 )
 
-// OpenConn is a function to open database connection pool
-func OpenConn() (*sql.DB, error) {
+// OpenPGConn is a function to open database connection pool
+func OpenPGConn() (*sql.DB, error) {
 
 	// build config env
 	env := config.LoadENV()
