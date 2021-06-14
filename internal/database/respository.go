@@ -1,16 +1,9 @@
-package postgresql
+package database
 
 import (
 	"context"
 	"database/sql"
-
-	"github.com/rasatmaja/zephyr-one/internal/database"
 )
-
-// Queries ...
-type Queries struct {
-	db database.ISQL
-}
 
 // New is function to initialize progresql
 func New() *Queries {
