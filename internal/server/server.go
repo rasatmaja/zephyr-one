@@ -6,7 +6,6 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/config"
-	"github.com/rasatmaja/zephyr-one/internal/database"
 	"github.com/rasatmaja/zephyr-one/internal/handler"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/middleware"
@@ -21,7 +20,6 @@ type App struct {
 	env        *config.ENV
 	middleware *middleware.App
 	utils      *utils.Registry
-	db         database.IRepository
 }
 
 // New is a function to initialize sever and its component
@@ -38,8 +36,6 @@ func New() *App {
 
 	// setup utils
 	utils := utils.New()
-
-	db := database.New()
 
 	// setup server
 	svr := fiber.New(
@@ -60,7 +56,6 @@ func New() *App {
 		env:        env,
 		middleware: mdlwre,
 		utils:      utils,
-		db:         db,
 	}
 }
 
