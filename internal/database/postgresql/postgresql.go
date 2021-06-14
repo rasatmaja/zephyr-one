@@ -7,12 +7,14 @@ import (
 
 	// PostgreSQL driver
 	_ "github.com/jackc/pgx/v4/stdlib"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/database"
 )
 
 // Queries ...
 type Queries struct {
-	db database.ISQL
+	db  database.ISQL
+	env *config.ENV
 }
 
 // WithTx ..
@@ -25,12 +27,18 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 // New is function to initialize progresql
 func New() *Queries {
 
-	databaseHost := "localhost"
-	databasePort := 5432
-	databaseUsername := "root"
-	databasePassword := "root"
-	databaseName := "test"
-	databaseSSLMode := "disable"
+	// build config env
+	env := config.LoadENV()
+	queries := &Queries{
+		env: env,
+	}
+
+	databaseHost := env.DBPostgresHost
+	databasePort := env.DBPostgresPort
+	databaseUsername := env.DBPostgresUsername
+	databasePassword := env.DBPostgresPassword
+	databaseName := env.DBPostgresDatabase
+	databaseSSLMode := env.DBPostgresSSLMode
 
 	dsn := url.URL{
 		Scheme: "postgres",
@@ -53,8 +61,7 @@ func New() *Queries {
 		panic(err)
 	}
 
-	return &Queries{
-		db: db,
-	}
+	queries.db = db
+	return queries
 
 }
