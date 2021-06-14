@@ -8,30 +8,13 @@ import (
 	// PostgreSQL driver
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/rasatmaja/zephyr-one/internal/config"
-	"github.com/rasatmaja/zephyr-one/internal/database"
 )
 
-// Queries ...
-type Queries struct {
-	db  database.ISQL
-	env *config.ENV
-}
-
-// WithTx ..
-func (q *Queries) WithTx(tx *sql.Tx) *Queries {
-	return &Queries{
-		db: tx,
-	}
-}
-
-// New is function to initialize progresql
-func New() *Queries {
+// OpenConn is a function to open database connection pool
+func OpenConn() (*sql.DB, error) {
 
 	// build config env
 	env := config.LoadENV()
-	queries := &Queries{
-		env: env,
-	}
 
 	databaseHost := env.DBPostgresHost
 	databasePort := env.DBPostgresPort
@@ -52,16 +35,10 @@ func New() *Queries {
 
 	dsn.RawQuery = q.Encode()
 
+	// open connection to PostgreSQL server
 	db, err := sql.Open("pgx", dsn.String())
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("cannot open connection, got: %v", err)
 	}
-
-	if err := db.Ping(); err != nil {
-		panic(err)
-	}
-
-	queries.db = db
-	return queries
-
+	return db, nil
 }
