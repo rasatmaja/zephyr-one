@@ -33,13 +33,19 @@ func New() *Logger {
 		}
 		fmt.Printf("[ LGGR ] Set logger output to %s \n", env.LogOutput)
 
-		lvl, err := zerolog.ParseLevel(strings.ToLower(env.LogLevel))
-		if err != nil {
-			fmt.Printf("[ LGGR ] Error parse level, got: %s \n", err)
+		var lvl zerolog.Level = zerolog.Disabled
+		var err error
 
-			lvl = zerolog.TraceLevel
-			fmt.Println("[ LGGR ] Switch level to TRACE")
+		if strings.ToLower(env.LogLevel) != "silent" && strings.ToLower(env.LogLevel) != "disable" {
+			lvl, err = zerolog.ParseLevel(strings.ToLower(env.LogLevel))
+			if err != nil {
+				fmt.Printf("[ LGGR ] Error parse level, got: %s \n", err)
+
+				lvl = zerolog.TraceLevel
+				fmt.Println("[ LGGR ] Switch level to TRACE")
+			}
 		}
+
 		logger = logger.Level(lvl)
 		fmt.Printf("[ LGGR ] Set logger level to %s \n", logger.GetLevel())
 
