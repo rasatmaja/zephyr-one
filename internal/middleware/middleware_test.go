@@ -5,11 +5,16 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 )
 
 func TestMiddleware(t *testing.T) {
 	// setup fiber app
 	app := fiber.New()
+
+	// load env
+	env := config.LoadENV()
+	env.LogLevel = "disable"
 
 	// setup middleware
 	mdlwr := New(app)
