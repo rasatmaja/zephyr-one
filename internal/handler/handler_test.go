@@ -5,12 +5,15 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
 func TestHandler(t *testing.T) {
 	// setup fiber app
 	app := fiber.New()
+	env := config.LoadENV()
+	env.LogLevel = "disable" // disable logging
 
 	// setup handler
 	handler := &Endpoint{
