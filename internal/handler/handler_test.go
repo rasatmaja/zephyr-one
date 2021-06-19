@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
 func TestHandler(t *testing.T) {
@@ -12,7 +13,9 @@ func TestHandler(t *testing.T) {
 	app := fiber.New()
 
 	// setup handler
-	handler := New()
+	handler := &Endpoint{
+		log: logger.New(),
+	}
 
 	// run test case
 	t.Run("Base/success", func(t *testing.T) {
@@ -65,4 +68,17 @@ func TestHandler(t *testing.T) {
 		}
 	})
 
+}
+
+func TestNew(t *testing.T) {
+	t.Run("panic", func(t *testing.T) {
+		defer func() {
+			if r := recover(); r == nil {
+				t.Errorf("The code did not panic")
+				t.Fail()
+			}
+		}()
+
+		New()
+	})
 }
