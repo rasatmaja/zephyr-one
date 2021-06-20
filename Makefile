@@ -29,3 +29,8 @@ build-windows:
 	file ./build/${APP_NAME}-windows.exe
 
 build-all: build-linux build-windows
+
+test-cover:
+	go test ./... -coverprofile cover.out
+	go tool cover -func cover.out
+	rm cover.out
