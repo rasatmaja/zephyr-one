@@ -1,15 +1,16 @@
 package utils
 
 import (
-	"os"
+	"fmt"
 	"testing"
 )
 
 func TestCertificates(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
+		tempDir := t.TempDir()
 		cert := &Cert{
-			CertFilename:    "cert.pem",
-			PrivKeyFilename: "priv.pem",
+			CertFilename:    fmt.Sprintf("%s/cert.pem", tempDir),
+			PrivKeyFilename: fmt.Sprintf("%s/priv.pem", tempDir),
 			Permission:      0600,
 		}
 
@@ -19,11 +20,6 @@ func TestCertificates(t *testing.T) {
 		if err != nil {
 			t.Fail()
 		}
-
-		t.Cleanup(func() {
-			os.Remove("cert.pem")
-			os.Remove("priv.pem")
-		})
 	})
 }
 

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -41,12 +42,24 @@ func TestServer(t *testing.T) {
 	})
 
 	t.Run("success-with-tls", func(t *testing.T) {
+		// setup temp directory
+		tempDir := t.TempDir()
+		utils := &utils.Registry{
+			Assets: &utils.Assets{},
+			Cert: &utils.Cert{
+				CertFilename:    fmt.Sprintf("%s/cert.pem", tempDir),
+				PrivKeyFilename: fmt.Sprintf("%s/priv.pem", tempDir),
+				Permission:      0600,
+			},
+		}
+
+		// setup server
 		svr := fiber.New()
 		app := &App{
 			server:     svr,
 			logger:     logger.New(),
 			middleware: middleware.New(svr),
-			utils:      utils.New(),
+			utils:      utils,
 			env:        config.LoadENV(),
 		}
 		app.env.TLS = true
