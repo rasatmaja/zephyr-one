@@ -4,15 +4,15 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/rasatmaja/zephyr-one/internal/database"
 	"github.com/rasatmaja/zephyr-one/internal/database/postgresql"
+	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
 
 // Endpoint ...
 type Endpoint struct {
 	log  *logger.Logger
-	repo database.IRepository
+	repo repository.IRepository
 }
 
 // New is afunction to create handle instance

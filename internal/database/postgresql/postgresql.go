@@ -11,11 +11,11 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 
 	"github.com/rasatmaja/zephyr-one/internal/config"
-	"github.com/rasatmaja/zephyr-one/internal/database"
+	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 )
 
 // Queries is extended type of database/Queries
-type Queries database.Queries
+type Queries repository.Queries
 
 // New is function to initialize progresql
 func New() *Queries {
@@ -74,7 +74,7 @@ func (qry *Queries) OpenConn() (*sql.DB, error) {
 }
 
 // BeginTX is a function to start transaction
-func (qry *Queries) BeginTX(ctx context.Context) (database.IRepository, *sql.Tx, error) {
+func (qry *Queries) BeginTX(ctx context.Context) (repository.IRepository, *sql.Tx, error) {
 	db, err := qry.OpenConn()
 	if err != nil {
 		return nil, nil, fmt.Errorf("Unable to open connection, got: %v", err)
