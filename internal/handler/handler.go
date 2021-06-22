@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/rasatmaja/zephyr-one/internal/database/postgresql"
+	"github.com/rasatmaja/zephyr-one/internal/database"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 )
@@ -18,7 +18,7 @@ type Endpoint struct {
 // New is afunction to create handle instance
 func New() *Endpoint {
 	log := logger.New()
-	db := postgresql.New()
+	db := database.Factory()
 	return &Endpoint{
 		log:  log,
 		repo: db,
