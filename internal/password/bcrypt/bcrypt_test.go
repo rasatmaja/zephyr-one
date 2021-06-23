@@ -15,7 +15,6 @@ func TestHash(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		bcrypt := New()
 		hash, err := bcrypt.Hash("test-hash-password")
-		t.Log(hash)
 		if bcrypt == nil || err != nil || len(hash) == 0 {
 			t.Fail()
 		}
