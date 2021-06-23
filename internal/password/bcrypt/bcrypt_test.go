@@ -20,3 +20,40 @@ func TestHash(t *testing.T) {
 		}
 	})
 }
+
+func TestCompare(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		plain := "secret"
+		bcrypt := New()
+		if bcrypt == nil {
+			t.Fail()
+		}
+		hash, err := bcrypt.Hash(plain)
+		if err != nil || len(hash) == 0 {
+			t.Fail()
+		}
+		match, err := bcrypt.Compare(plain, hash)
+
+		if err != nil || !match {
+			t.Fail()
+		}
+	})
+
+	t.Run("password-not-match", func(t *testing.T) {
+		plain := "secret"
+		wrong := "wrong-secret"
+		bcrypt := New()
+		if bcrypt == nil {
+			t.Fail()
+		}
+		hash, err := bcrypt.Hash(plain)
+		if err != nil || len(hash) == 0 {
+			t.Fail()
+		}
+		match, err := bcrypt.Compare(wrong, hash)
+
+		if err == nil || match {
+			t.Fail()
+		}
+	})
+}
