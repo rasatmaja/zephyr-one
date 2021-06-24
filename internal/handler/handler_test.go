@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
+	"github.com/rasatmaja/zephyr-one/internal/password"
 )
 
 func TestHandler(t *testing.T) {
@@ -17,7 +18,8 @@ func TestHandler(t *testing.T) {
 
 	// setup handler
 	handler := &Endpoint{
-		log: logger.New(),
+		log:      logger.New(),
+		password: password.Factory(),
 	}
 
 	// run test case
