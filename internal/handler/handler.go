@@ -8,6 +8,7 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/password"
+	"github.com/rasatmaja/zephyr-one/internal/response"
 )
 
 // Endpoint ...
@@ -35,11 +36,9 @@ func (e *Endpoint) HelloWorld(c *fiber.Ctx) error {
 
 // PageNotfound is a handler to handle undefined route
 func (e *Endpoint) PageNotfound(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusNotFound).JSON(
-		fiber.Map{
-			"message": fmt.Sprintf("URL [%s] not found", c.Path()),
-		},
-	)
+	res := response.Factory()
+	res.NotFound(fmt.Sprintf("URL [%s] not found", c.Path()))
+	return c.Status(res.Code).JSON(res)
 }
 
 // Base is a handler to handle base url "/"
@@ -47,11 +46,9 @@ func (e *Endpoint) Base(c *fiber.Ctx) error {
 	fLog := e.log.With().Str("func", "Base").Logger()
 	if c.Method() == fiber.MethodPost {
 		fLog.Trace().Msg("Base URL POST Hit")
-		pwd, _ := e.password.Hash("Zephyr One")
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"message":    "Hello from Zephyr One",
-			"passphrase": pwd,
-		})
+		res := response.Factory()
+		res.Success("Hello from Zephyr One")
+		return c.Status(res.Code).JSON(res)
 	}
 	fLog.Trace().Msg("Base URL Hit")
 	return c.SendString("Hello from zephyr one")

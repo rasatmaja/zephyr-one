@@ -87,3 +87,23 @@ func TestNew(t *testing.T) {
 		New()
 	})
 }
+
+func BenchmarkBaseHandler(b *testing.B) {
+	// setup fiber app
+	app := fiber.New()
+	env := config.LoadENV()
+	env.LogLevel = "disable" // disable logging
+
+	// setup handler
+	handler := &Endpoint{
+		log:      logger.New(),
+		password: password.Factory(),
+	}
+	app.Use(handler.PageNotfound)
+
+	b.Run("page-not-found", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			app.Test(httptest.NewRequest("GET", "/unknown", nil))
+		}
+	})
+}
