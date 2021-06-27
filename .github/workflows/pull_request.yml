@@ -67,7 +67,7 @@ jobs:
         with:
           script: |
             const fs = require('fs')
-            fs.readFile('Input.txt', 'utf-8', (err, data) => {
+            fs.readFile('coverage.out', 'utf-8', (err, data) => {
                 if (err) throw err;
 
                 github.issues.createComment({
