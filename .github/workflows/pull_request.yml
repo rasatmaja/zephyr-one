@@ -57,18 +57,20 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: coverage
-      - shell: bash
+      - name: Display code coverage
+        shell: bash
         run: |
           ls
-          value=`cat coverage.out`
-          echo $value
+          cat coverage.out
       - name: Publish code coverage into PR
         uses: actions/github-script@v4
         with:
           script: |
+            const { promises: fs } = require('fs')
+            let content = await fs.readFile(coverage.out, 'utf8')
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '👋 Thanks for create pull request!'
+              body: '👋 *Code Coverage* \n' + '``` \n' + content + ' \n ```'
             })    
