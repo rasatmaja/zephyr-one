@@ -1,0 +1,25 @@
+name: Zephyr One - Merge to Master
+
+on: [push]
+
+jobs:
+  lint:
+    name: Go Build
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: zephyr-one
+      APP_MAIN_PATH: cmd/main/main.go
+    steps:
+
+    - name: Set up Go 1.16.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Building Go Apps
+      run: |
+          go build -a -ldflags '-extldflags "-static"' -o ${{ env.APP_NAME }}.app ${{ env.APP_MAIN_PATH }}
