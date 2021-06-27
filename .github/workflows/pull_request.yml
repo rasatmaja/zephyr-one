@@ -62,17 +62,12 @@ jobs:
         run: |
           ls
           cat coverage.out
-      - name: Read code coverage file
-        uses: andstor/file-reader-action@v1
-        with:
-          path: "coverage.out"    
+          echo "FILE_CONTENT=$(cat coverage.out)" >> $GITHUB_ENV 
       - name: Publish code coverage into PR
         uses: actions/github-script@v4
-        env:
-          CONTENT: ${{ steps.read_file.outputs.contents }}
         with:
           script: |
-            var content = process.env.CONTENT
+            var content = process.env.FILE_CONTENT
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
