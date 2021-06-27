@@ -23,3 +23,10 @@ jobs:
     - name: Building Go Apps
       run: |
           go build -a -ldflags '-extldflags "-static"' -o ${{ env.APP_NAME }}.app ${{ env.APP_MAIN_PATH }}
+    
+    - name: 'Upload Go App Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.APP_NAME }}
+        path: ${{ env.APP_NAME }}.app
+        retention-days: 5      
