@@ -37,6 +37,7 @@ package response
  *	}
  */
 
+// Response define a JSON structure for http response
 type Response struct {
 	Code       int             `json:"code,omitempty"`
 	Status     string          `json:"status,omitempty"`
