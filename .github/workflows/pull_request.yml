@@ -1,6 +1,6 @@
 name: Pull Request - Go Lint and Test
 
-on: [push]
+on: [pull_request]
 
 jobs:
   lint:
