@@ -1,4 +1,4 @@
-name: Pull Request - Go Lint and Test
+name: Zephyr One - Pull Request
 
 on: [pull_request]
 
