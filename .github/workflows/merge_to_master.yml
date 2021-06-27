@@ -1,7 +1,9 @@
 name: Zephyr One - Merge to Master
 
-on: [push]
-
+on: 
+  push:
+    branches:
+      - master
 jobs:
   lint:
     name: Go Build
