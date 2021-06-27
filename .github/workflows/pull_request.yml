@@ -62,12 +62,15 @@ jobs:
         run: |
           ls
           cat coverage.out
+      - name: Read code coverage file
+        uses: andstor/file-reader-action@v1
+        with:
+          path: "coverage.out"    
       - name: Publish code coverage into PR
         uses: actions/github-script@v4
         with:
           script: |
-            const { promises: fs } = require('fs')
-            let content = await fs.readFile(coverage.out, 'utf8')
+            var content = ${ steps.read_file.outputs.contents }
             github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
