@@ -70,11 +70,14 @@ jobs:
             fs.readFile('coverage.out', 'utf-8', (err, data) => {
                 if (err) throw err;
 
+                let splitArray = data.split('\n');
+                let total = splitArray[splitArray.length - 1].replace(/[^\d.-]/g, '');
+
                 github.issues.createComment({
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  body: '## **Code Coverage** \n' + '``` \n' + data + ' \n ```'
+                  body: '## **Code Coverage** : ' + total + '% \n' + '``` \n' + data + ' \n ```'
                 })  
             })
               
