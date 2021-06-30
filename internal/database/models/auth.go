@@ -1,8 +1,12 @@
 package models
 
+import "time"
+
 // Auth define column table auth
 type Auth struct {
-	id         string
-	username   string
-	passphrase string
+	ID         string
+	Username   string
+	Passphrase string
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
