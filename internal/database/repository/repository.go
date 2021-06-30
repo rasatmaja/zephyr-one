@@ -3,6 +3,8 @@ package repository
 import (
 	"context"
 	"database/sql"
+
+	"github.com/rasatmaja/zephyr-one/internal/database/models"
 )
 
 // ISQL is a interface for database/sql
@@ -21,4 +23,5 @@ type Queries struct {
 // IRepository is a interface to define base function for every repo
 type IRepository interface {
 	BeginTX(ctx context.Context) (IRepository, *sql.Tx, error)
+	CreateAuth(ctx context.Context, username, passphrase string) (*models.Auth, error)
 }
