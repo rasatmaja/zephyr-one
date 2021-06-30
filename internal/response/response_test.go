@@ -41,6 +41,11 @@ func TestNotFound(t *testing.T) {
 	res.NotFound("Test 404 error")
 }
 
+func TestCreated(t *testing.T) {
+	res := Factory()
+	res.Created("Test 201 created")
+}
+
 func BenchmarkResponse(b *testing.B) {
 	b.Run("success", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
