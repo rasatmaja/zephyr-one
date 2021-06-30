@@ -9,4 +9,6 @@ func (a *App) InitializeRoute() {
 	a.server.Post("/", a.handler.Base)
 
 	a.server.Get("/hello", a.handler.HelloWorld)
+
+	a.server.Post("/register", a.handler.Regitration)
 }
