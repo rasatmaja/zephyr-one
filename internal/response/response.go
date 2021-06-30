@@ -112,3 +112,14 @@ func (res *Response) NotFound(msg ...string) *Response {
 	}
 	return res
 }
+
+// Created will build error response with 201 http code
+func (res *Response) Created(msg ...string) *Response {
+	res.Code = 201
+	res.Status = "created"
+	res.Message = res.Status
+	if len(msg) > 0 {
+		res.Message = msg[0]
+	}
+	return res
+}
