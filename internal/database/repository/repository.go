@@ -24,4 +24,5 @@ type Queries struct {
 type IRepository interface {
 	BeginTX(ctx context.Context) (IRepository, *sql.Tx, error)
 	CreateAuth(ctx context.Context, username, passphrase string) (*models.Auth, error)
+	CreateAccountInfo(ctx context.Context, id, name string) (*models.AccountInfo, error)
 }
