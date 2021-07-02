@@ -74,7 +74,7 @@ func (qry *Queries) OpenConn() (*sql.DB, error) {
 }
 
 // BeginTX is a function to start transaction
-func (qry *Queries) BeginTX(ctx context.Context) (repository.IRepository, *sql.Tx, error) {
+func (qry *Queries) BeginTX(ctx context.Context) (repository.IRepository, repository.ISQLTX, error) {
 	db, err := qry.OpenConn()
 	if err != nil {
 		return nil, nil, fmt.Errorf("Unable to open connection, got: %v", err)
