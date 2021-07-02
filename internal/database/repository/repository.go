@@ -15,6 +15,12 @@ type ISQL interface {
 	QueryRowContext(context.Context, string, ...interface{}) *sql.Row
 }
 
+//ISQLTX is a interface for sql transaction
+type ISQLTX interface {
+	Rollback() error
+	Commit() error
+}
+
 // Queries ...
 type Queries struct {
 	DB ISQL
@@ -22,7 +28,7 @@ type Queries struct {
 
 // IRepository is a interface to define base function for every repo
 type IRepository interface {
-	BeginTX(ctx context.Context) (IRepository, *sql.Tx, error)
+	BeginTX(ctx context.Context) (IRepository, ISQLTX, error)
 	CreateAuth(ctx context.Context, username, passphrase string) (*models.Auth, error)
 	CreateAccountInfo(ctx context.Context, id, name string) (*models.AccountInfo, error)
 }
