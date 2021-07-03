@@ -14,7 +14,7 @@ CREATE TABLE auth (
 -- Create table account_info CREATE
 CREATE TABLE account_info (
     id uuid PRIMARY KEY,
-    name VARCHAR ( 100 ) UNIQUE NOT NULL,
+    name VARCHAR ( 100 ) NOT NULL,
     photo_profile VARCHAR ( 200 ),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

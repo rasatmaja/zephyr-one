@@ -16,13 +16,14 @@ type RegistrationRes struct {
 func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	fLog := e.log.With().Str("func", "Regitration").Logger()
 
+	// build response
+	res := response.Factory()
+
 	// parse body request from JSON to struct
 	req := &RegistrationRes{}
 	err := c.BodyParser(req)
 	if err != nil {
 		fLog.Error().Msgf("BodyParser error, got: %v", err)
-		// build response
-		res := response.Factory()
 		res.BadRequest("unable processing request")
 		return c.Status(res.Code).JSON(res)
 	}
@@ -31,8 +32,6 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	hashedpwd, err := e.password.Hash(req.Passphrase)
 	if err != nil {
 		fLog.Error().Msgf("Hashing password error, got: %v", err)
-		// build response
-		res := response.Factory()
 		res.InternalServerError("unable hashing passphrase")
 		return c.Status(res.Code).JSON(res)
 	}
@@ -40,8 +39,6 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	repo, trx, err := e.repo.BeginTX(c.Context())
 	if err != nil {
 		fLog.Error().Msgf("unable begin transaction, got: %v", err)
-		// build response
-		res := response.Factory()
 		res.InternalServerError("failed to create record in database")
 		return c.Status(res.Code).JSON(res)
 	}
@@ -50,8 +47,6 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	if err != nil {
 		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
-		// build response
-		res := response.Factory()
 		res.InternalServerError("failed to create record in database")
 		return c.Status(res.Code).JSON(res)
 	}
@@ -60,14 +55,11 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	if err != nil {
 		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
-		// build response
-		res := response.Factory()
 		res.InternalServerError("failed to create record in database")
 		return c.Status(res.Code).JSON(res)
 	}
 	trx.Commit()
-	// build response
-	res := response.Factory()
+
 	res.Created("successfully registered")
 	return c.Status(res.Code).JSON(res)
 }
