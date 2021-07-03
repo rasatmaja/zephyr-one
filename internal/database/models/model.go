@@ -1,8 +1,24 @@
 package models
 
-import (
-	"reflect"
-)
+import "reflect"
+
+// Models ...
+type Models struct {
+	columns   []string
+	fieldsptr []interface{}
+}
+
+// Columns is a method to get columns name
+func (m *Models) Columns(models interface{}) []string {
+	m.columns = columns(models)
+	return m.columns
+}
+
+// Fields is a method to get fields pointer
+func (m *Models) Fields(models interface{}) []interface{} {
+	m.fieldsptr = fields(models)
+	return m.fieldsptr
+}
 
 // columns is a helper function to get all columns from a tag struct
 func columns(models interface{}) []string {
