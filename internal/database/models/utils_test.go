@@ -30,6 +30,10 @@ func TestFields(t *testing.T) {
 	t.Run("fields", func(t *testing.T) {
 		auth := &Auth{}
 		flds := fields(auth)
+
+		expected := []interface{}{&auth.ID, &auth.Username, &auth.Passphrase, &auth.CreatedAt, &auth.UpdatedAt}
+
+		assert.Equal(t, expected, flds)
 		assert.NotEmpty(t, flds)
 	})
 }

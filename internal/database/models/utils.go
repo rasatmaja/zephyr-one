@@ -14,7 +14,7 @@ func columns(models interface{}) []string {
 		mdl = mdl.Elem()
 	}
 
-	columns := make([]string, mdl.NumField())
+	var columns []string
 	// iterate all field on struct
 	for i := 0; i < mdl.NumField(); i++ {
 		types := mdl.Type().Field(i)
@@ -25,7 +25,7 @@ func columns(models interface{}) []string {
 		}
 
 		// push column to slice
-		columns[i] = column
+		columns = append(columns, column)
 	}
 	return columns
 }
@@ -39,7 +39,7 @@ func fields(models interface{}) []interface{} {
 		mdl = mdl.Elem()
 	}
 
-	fields := make([]interface{}, mdl.NumField())
+	var fields []interface{}
 	// iterate all field on struct
 	for i := 0; i < mdl.NumField(); i++ {
 		field := mdl.Field(i)
@@ -49,7 +49,7 @@ func fields(models interface{}) []interface{} {
 		}
 
 		// push column to slice
-		fields[i] = field.Addr().Interface()
+		fields = append(fields, field.Addr().Interface())
 	}
 	return fields
 
