@@ -8,10 +8,13 @@ import (
 
 func TestColumns(t *testing.T) {
 	t.Run("column", func(t *testing.T) {
-		auth := &Auth{}
-		columns := columns(auth)
-
-		expectedCols := []string{"id", "username", "passphrase", "created_at", "updated_at"}
+		type test struct {
+			a string `column:"a"`
+			b string `column:"b"`
+		}
+		x := &test{}
+		columns := columns(x)
+		expectedCols := []string{"a", "b"}
 		assert.Equal(t, expectedCols, columns)
 	})
 
@@ -28,10 +31,15 @@ func TestColumns(t *testing.T) {
 
 func TestFields(t *testing.T) {
 	t.Run("fields", func(t *testing.T) {
-		auth := &Auth{}
-		flds := fields(auth)
+		type test struct {
+			A string `column:"a"`
+			B string `column:"b"`
+			C string
+		}
+		x := &test{}
+		flds := fields(x)
 
-		expected := []interface{}{&auth.ID, &auth.Username, &auth.Passphrase, &auth.CreatedAt, &auth.UpdatedAt}
+		expected := []interface{}{&x.A, &x.B}
 
 		assert.Equal(t, expected, flds)
 		assert.NotEmpty(t, flds)
