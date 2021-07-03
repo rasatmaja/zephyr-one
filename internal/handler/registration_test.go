@@ -64,7 +64,7 @@ func TestRegistration(t *testing.T) {
 		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
 	})
 
-	t.Run("error-create-auth", func(t *testing.T) {
+	t.Run("error-begin-trx", func(t *testing.T) {
 
 		// start password mock
 		pwd := &password.Mock{}
@@ -73,7 +73,7 @@ func TestRegistration(t *testing.T) {
 
 		// start repo mock
 		repo := &repository.Mock{}
-		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, fmt.Errorf("error create auth")).Once()
+		repo.On("BeginTX", mock.Anything).Return(repo, repo, fmt.Errorf("error begin tx")).Once()
 		handler.repo = repo
 
 		// build body request
@@ -103,8 +103,43 @@ func TestRegistration(t *testing.T) {
 
 		// start repo mock
 		repo := &repository.Mock{}
-		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil).Once()
-		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, fmt.Errorf("error create account info")).Once()
+		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, fmt.Errorf("error create auth"))
+		repo.On("Rollback").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+		handler.repo = repo
+
+		// build body request
+		body := &RegistrationRes{
+			Username:   "test-username",
+			Passphrase: "test-passphrase",
+			Name:       "test-name",
+		}
+		sbody, _ := json.Marshal(body)
+		req := httptest.NewRequest("POST", "/register", bytes.NewReader(sbody))
+		req.Header.Set("Content-Type", "application/json")
+
+		app.Post("/register", handler.Regitration)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
+	})
+
+	t.Run("error-create-account", func(t *testing.T) {
+
+		// start password mock
+		pwd := &password.Mock{}
+		pwd.On("Hash", mock.Anything).Return("", nil).Once()
+		handler.password = pwd
+
+		// start repo mock
+		repo := &repository.Mock{}
+		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil)
+		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, fmt.Errorf("error create account info"))
+		repo.On("Rollback").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+		handler.repo = repo
 		handler.repo = repo
 
 		// build body request
@@ -134,8 +169,11 @@ func TestRegistration(t *testing.T) {
 
 		// start repo mock
 		repo := &repository.Mock{}
-		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil).Once()
-		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, nil).Once()
+		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil)
+		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, nil)
+		repo.On("Commit").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+		handler.repo = repo
 		handler.repo = repo
 
 		// build body request
