@@ -37,8 +37,18 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 		return c.Status(res.Code).JSON(res)
 	}
 
-	auth, err := e.repo.CreateAuth(c.Context(), req.Username, hashedpwd)
+	repo, trx, err := e.repo.BeginTX(c.Context())
 	if err != nil {
+		fLog.Error().Msgf("unable begin transaction, got: %v", err)
+		// build response
+		res := response.Factory()
+		res.InternalServerError("failed to create record in database")
+		return c.Status(res.Code).JSON(res)
+	}
+
+	auth, err := repo.CreateAuth(c.Context(), req.Username, hashedpwd)
+	if err != nil {
+		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
 		// build response
 		res := response.Factory()
@@ -46,14 +56,16 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 		return c.Status(res.Code).JSON(res)
 	}
 
-	_, err = e.repo.CreateAccountInfo(c.Context(), auth.ID, req.Name)
+	_, err = repo.CreateAccountInfo(c.Context(), auth.ID, req.Name)
 	if err != nil {
+		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
 		// build response
 		res := response.Factory()
 		res.InternalServerError("failed to create record in database")
 		return c.Status(res.Code).JSON(res)
 	}
+	trx.Commit()
 	// build response
 	res := response.Factory()
 	res.Created("successfully registered")
