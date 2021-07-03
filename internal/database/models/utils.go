@@ -4,8 +4,8 @@ import (
 	"reflect"
 )
 
-// Columns is a helper function to get all columns from a tag struct
-func Columns(models interface{}) []string {
+// columns is a helper function to get all columns from a tag struct
+func columns(models interface{}) []string {
 
 	// get value from interface
 	mdl := reflect.ValueOf(models)
@@ -14,7 +14,7 @@ func Columns(models interface{}) []string {
 		mdl = mdl.Elem()
 	}
 
-	var columns []string
+	columns := make([]string, mdl.NumField())
 	// iterate all field on struct
 	for i := 0; i < mdl.NumField(); i++ {
 		types := mdl.Type().Field(i)
@@ -25,13 +25,13 @@ func Columns(models interface{}) []string {
 		}
 
 		// push column to slice
-		columns = append(columns, column)
+		columns[i] = column
 	}
 	return columns
 }
 
-// Fields is a helper to populate field pointer from struct
-func Fields(models interface{}) []interface{} {
+// fields is a helper to populate field pointer from struct
+func fields(models interface{}) []interface{} {
 	// get value from interface
 	mdl := reflect.ValueOf(models)
 	// check if models kind is pointer
@@ -39,18 +39,17 @@ func Fields(models interface{}) []interface{} {
 		mdl = mdl.Elem()
 	}
 
-	var fields []interface{}
+	fields := make([]interface{}, mdl.NumField())
 	// iterate all field on struct
 	for i := 0; i < mdl.NumField(); i++ {
-		value := mdl.Field(i)
-		//field := mdl.Type().Field(i)
+		field := mdl.Field(i)
 
-		//fmt.Println(value.Addr().Pointer())
-		//fmt.Println(value.Kind())
-		//fmt.Println(field)
+		if _, ok := mdl.Type().Field(i).Tag.Lookup("column"); !ok {
+			continue
+		}
 
 		// push column to slice
-		fields = append(fields, value.Addr().Interface())
+		fields[i] = field.Addr().Interface()
 	}
 	return fields
 

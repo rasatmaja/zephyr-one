@@ -9,7 +9,7 @@ import (
 func TestColumns(t *testing.T) {
 	t.Run("column", func(t *testing.T) {
 		auth := &Auth{}
-		columns := Columns(auth)
+		columns := columns(auth)
 
 		expectedCols := []string{"id", "username", "passphrase", "created_at", "updated_at"}
 		assert.Equal(t, expectedCols, columns)
@@ -20,7 +20,7 @@ func TestColumns(t *testing.T) {
 			test string `nocolumn:"test"`
 		}
 		x := &test{}
-		columns := Columns(x)
+		columns := columns(x)
 
 		assert.Empty(t, columns)
 	})
@@ -29,7 +29,7 @@ func TestColumns(t *testing.T) {
 func TestFields(t *testing.T) {
 	t.Run("fields", func(t *testing.T) {
 		auth := &Auth{}
-		flds := Fields(auth)
+		flds := fields(auth)
 		assert.NotEmpty(t, flds)
 	})
 }
