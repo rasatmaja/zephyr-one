@@ -18,20 +18,25 @@ import (
 )
 
 func TestRegistration(t *testing.T) {
-	// setup fiber app
-	app := fiber.New()
-	defer app.Shutdown()
-	env := config.LoadENV()
-	env.LogLevel = "disable" // disable logging
-
 	// setup handler
 	handler := &Endpoint{
 		log: logger.New(),
 	}
 
+	// setup fiber app
+	app := fiber.New(
+		fiber.Config{
+			ErrorHandler: handler.Error,
+		},
+	)
+	defer app.Shutdown()
+	env := config.LoadENV()
+	env.LogLevel = "disable" // disable logging
+
 	t.Run("error-parse-request-body", func(t *testing.T) {
 		app.Post("/register", handler.Regitration)
-		resp, err := app.Test(httptest.NewRequest("POST", "/register", nil))
+		req := httptest.NewRequest("POST", "/register", nil)
+		resp, err := app.Test(req)
 
 		// begin assert response from http test
 		assert.NoError(t, err)
