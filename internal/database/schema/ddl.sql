@@ -1,3 +1,5 @@
+-- AUTHOR: Rasio Ganang Atmaja <rasioatmaja29@gmail.com>
+
 -- DROP Tables
 DROP TABLE IF EXISTS account_info;
 DROP TABLE IF EXISTS auth;

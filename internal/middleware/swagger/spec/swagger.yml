@@ -23,6 +23,7 @@ tags:
 schemes:
   - http
   - https
+# Start Define Path  
 paths:
   # Start Authentication and Authorization
   /register:
@@ -67,6 +68,7 @@ paths:
                 type: string
                 example: successfully registered  
   # End Authentication and Authorization
+# End Define Path
 
 # Start Secutiry Definition  
 securityDefinitions:

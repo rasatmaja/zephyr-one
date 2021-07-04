@@ -36,6 +36,7 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 		return c.Status(res.Code).JSON(res)
 	}
 
+	// begin transaction
 	repo, trx, err := e.repo.BeginTX(c.Context())
 	if err != nil {
 		fLog.Error().Msgf("unable begin transaction, got: %v", err)
