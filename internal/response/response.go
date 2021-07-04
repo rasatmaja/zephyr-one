@@ -123,3 +123,7 @@ func (res *Response) Created(msg ...string) *Response {
 	}
 	return res
 }
+
+func (res *Response) Error() string {
+	return res.Message
+}
