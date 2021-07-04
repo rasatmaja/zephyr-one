@@ -24,40 +24,35 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	err := c.BodyParser(req)
 	if err != nil {
 		fLog.Error().Msgf("BodyParser error, got: %v", err)
-		res.BadRequest("unable processing request")
-		return c.Status(res.Code).JSON(res)
+		return res.BadRequest("unable processing request")
 	}
 
 	//generate hashed password
 	hashedpwd, err := e.password.Hash(req.Passphrase)
 	if err != nil {
 		fLog.Error().Msgf("Hashing password error, got: %v", err)
-		res.InternalServerError("unable hashing passphrase")
-		return c.Status(res.Code).JSON(res)
+		return res.InternalServerError("unable hashing passphrase")
 	}
 
 	// begin transaction
 	repo, trx, err := e.repo.BeginTX(c.Context())
 	if err != nil {
 		fLog.Error().Msgf("unable begin transaction, got: %v", err)
-		res.InternalServerError("failed to create record in database")
-		return c.Status(res.Code).JSON(res)
+		return res.InternalServerError("failed to create record in database")
 	}
 
 	auth, err := repo.CreateAuth(c.Context(), req.Username, hashedpwd)
 	if err != nil {
 		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
-		res.InternalServerError("failed to create record in database")
-		return c.Status(res.Code).JSON(res)
+		return res.InternalServerError("failed to create record in database")
 	}
 
 	_, err = repo.CreateAccountInfo(c.Context(), auth.ID, req.Name)
 	if err != nil {
 		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
-		res.InternalServerError("failed to create record in database")
-		return c.Status(res.Code).JSON(res)
+		return res.InternalServerError("failed to create record in database")
 	}
 	trx.Commit()
 
