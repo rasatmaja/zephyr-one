@@ -43,6 +43,9 @@ func New() *App {
 			ReadTimeout:  time.Duration(env.ServerReadTO) * time.Second,
 			WriteTimeout: time.Duration(env.ServerWriteTO) * time.Second,
 			IdleTimeout:  time.Duration(env.ServerIdleTO) * time.Second,
+
+			// Implement default error
+			ErrorHandler: handler.Error,
 		},
 	)
 
