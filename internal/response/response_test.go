@@ -46,6 +46,12 @@ func TestCreated(t *testing.T) {
 	res.Created("Test 201 created")
 }
 
+func TestError(t *testing.T) {
+	res := Factory()
+	res.Created("Testing")
+	_ = res.Error()
+}
+
 func BenchmarkResponse(b *testing.B) {
 	b.Run("success", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
