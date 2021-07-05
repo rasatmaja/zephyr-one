@@ -52,7 +52,8 @@ func (mdlwr *App) RequestID() {
 	mdlwr.server.Use(func(c *fiber.Ctx) error {
 		reqID := c.Get("X-Request-Id")
 		if len(reqID) == 0 {
-			reqID, _ = helper.GenerateRandomString(8)
+			str := helper.NewStrings()
+			reqID, _ = str.GenerateRandomString(8)
 			c.Set("X-Request-Id", reqID)
 		}
 		return c.Next()
@@ -73,7 +74,8 @@ func (mdlwr *App) TransactionID() {
 		if c.Method() != "GET" {
 			trxID := c.Get("X-Transaction-Id")
 			if len(trxID) == 0 {
-				trxID, _ = helper.GenerateRandomString(32)
+				str := helper.NewStrings()
+				trxID, _ = str.GenerateRandomString(32)
 				c.Set("X-Transaction-Id", trxID)
 			}
 		}
