@@ -43,8 +43,13 @@ func TestCompare(t *testing.T) {
 		plain := "secret"
 		wrong := "wrong-secret"
 		bcrypt := New()
-		hash, _ := bcrypt.Hash(plain)
-		bcrypt.Compare(wrong, hash)
+		hash, err := bcrypt.Hash(plain)
+		assert.NoError(t, err)
+		assert.NotEqual(t, 0, len(hash))
+		match, err := bcrypt.Compare(wrong, hash)
+
+		assert.NoError(t, err)
+		assert.Equal(t, false, match)
 	})
 
 	t.Run("error", func(t *testing.T) {
