@@ -42,7 +42,7 @@ func (e *Endpoint) Auth(c *fiber.Ctx) error {
 
 	if !match {
 		fLog.Error().Msg("Passphrase not match")
-		return res.BadRequest("Passphrase not match")
+		return res.Unauthorized("Passphrase not match")
 	}
 
 	return res.Success()

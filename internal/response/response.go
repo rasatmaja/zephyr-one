@@ -91,6 +91,17 @@ func (res *Response) InternalServerError(msg ...string) *Response {
 	return res
 }
 
+// Unauthorized will build error response with 401 http code
+func (res *Response) Unauthorized(msg ...string) *Response {
+	res.Code = 401
+	res.Status = "unauthorized"
+	res.Message = res.Status
+	if len(msg) > 0 {
+		res.Message = msg[0]
+	}
+	return res
+}
+
 // BadRequest will build error response with 400 http code
 func (res *Response) BadRequest(msg ...string) *Response {
 	res.Code = 400
