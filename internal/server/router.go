@@ -11,4 +11,6 @@ func (a *App) InitializeRoute() {
 	a.server.Get("/hello", a.handler.HelloWorld)
 
 	a.server.Post("/register", a.handler.Regitration)
+
+	a.server.Post("/login", a.handler.Auth)
 }
