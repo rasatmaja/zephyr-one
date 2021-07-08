@@ -13,11 +13,11 @@ CREATE TABLE auth (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create table account_info CREATE
+-- Create table account_info
 CREATE TABLE account_info (
     id uuid PRIMARY KEY,
     name VARCHAR ( 100 ) NOT NULL,
-    photo_profile VARCHAR ( 200 ),
+    photo_profile VARCHAR ( 200 ) NOT NULL DEFAULT '',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES auth(id) ON DELETE CASCADE
