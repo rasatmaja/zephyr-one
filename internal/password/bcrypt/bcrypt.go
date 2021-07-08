@@ -24,5 +24,8 @@ func (b *Bcrypt) Hash(plain string) (string, error) {
 // Compare is a function to compare plain string with hashed string
 func (b *Bcrypt) Compare(plain, hash string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(plain))
-	return err == nil, err
+	if err != nil && err != bcrypt.ErrMismatchedHashAndPassword {
+		return false, err
+	}
+	return err != bcrypt.ErrMismatchedHashAndPassword, nil
 }

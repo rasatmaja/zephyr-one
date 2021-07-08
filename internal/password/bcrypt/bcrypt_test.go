@@ -52,6 +52,20 @@ func TestCompare(t *testing.T) {
 		}
 		match, err := bcrypt.Compare(wrong, hash)
 
+		if err != nil || match {
+			t.Fail()
+		}
+	})
+
+	t.Run("error", func(t *testing.T) {
+		plain := "secret"
+		wronghash := "wrong-secret"
+		bcrypt := New()
+		if bcrypt == nil {
+			t.Fail()
+		}
+		match, err := bcrypt.Compare(plain, wronghash)
+
 		if err == nil || match {
 			t.Fail()
 		}
