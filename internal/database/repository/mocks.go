@@ -16,10 +16,22 @@ func (m *Mock) BeginTX(ctx context.Context) (IRepository, ISQLTX, error) {
 	return args.Get(0).(IRepository), args.Get(1).(ISQLTX), args.Error(2)
 }
 
+// Auth mock
+func (m *Mock) Auth(ctx context.Context, username string) (*models.Auth, error) {
+	args := m.Called(ctx, username)
+	return args.Get(0).(*models.Auth), args.Error(1)
+}
+
 // CreateAuth mock
 func (m *Mock) CreateAuth(ctx context.Context, username, passphrase string) (*models.Auth, error) {
 	args := m.Called(ctx, username, passphrase)
 	return args.Get(0).(*models.Auth), args.Error(1)
+}
+
+// Account mock
+func (m *Mock) Account(ctx context.Context, id string) (*models.AccountInfo, error) {
+	args := m.Called(ctx, id)
+	return args.Get(0).(*models.AccountInfo), args.Error(1)
 }
 
 // CreateAccountInfo mock

@@ -29,6 +29,12 @@ type Queries struct {
 // IRepository is a interface to define base function for every repo
 type IRepository interface {
 	BeginTX(ctx context.Context) (IRepository, ISQLTX, error)
+
+	// Auth repo repository
+	Auth(ctx context.Context, username string) (*models.Auth, error)
 	CreateAuth(ctx context.Context, username, passphrase string) (*models.Auth, error)
+
+	//Account info repository
+	Account(ctx context.Context, id string) (*models.AccountInfo, error)
 	CreateAccountInfo(ctx context.Context, id, name string) (*models.AccountInfo, error)
 }
