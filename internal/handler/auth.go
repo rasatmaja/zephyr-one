@@ -26,5 +26,24 @@ func (e *Endpoint) Auth(c *fiber.Ctx) error {
 		return res.BadRequest("unable processing request")
 	}
 
+	// get auth data
+	auth, err := e.repo.Auth(c.Context(), req.Username)
+	if err != nil {
+		fLog.Error().Msgf("Auth error, got: %v", err)
+		return res.InternalServerError("unable get auth data from database")
+	}
+
+	// compare passphrase
+	match, err := e.password.Compare(req.Passphrase, auth.Passphrase)
+	if err != nil {
+		fLog.Error().Msgf("Auth error, got: %v", err)
+		return res.InternalServerError("unable get compare passphrase with data from database")
+	}
+
+	if !match {
+		fLog.Error().Msg("Passphrase not match")
+		return res.BadRequest("Passphrase not match")
+	}
+
 	return res.Success()
 }
