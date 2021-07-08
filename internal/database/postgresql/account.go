@@ -2,6 +2,8 @@ package postgresql
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
 )
@@ -19,5 +21,26 @@ func (qry *Queries) CreateAccountInfo(ctx context.Context, id, name string) (*mo
 		ID:   id,
 		Name: name,
 	}
+	return acc, nil
+}
+
+// Account is a repo to pull all account data by its username
+func (qry *Queries) Account(ctx context.Context, id string) (*models.AccountInfo, error) {
+	acc := &models.AccountInfo{}
+
+	// build table name, column and var pointer
+	table := "account_info"
+	columns := strings.Join(acc.Columns(acc), ",")
+	fields := acc.Fields(acc)
+
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE id = $1 LIMIT 1", columns, table)
+	row := qry.DB.QueryRowContext(ctx, query, id)
+
+	// scan all column and put the value into var
+	err := row.Scan(fields...)
+	if err != nil {
+		return nil, err
+	}
+
 	return acc, nil
 }
