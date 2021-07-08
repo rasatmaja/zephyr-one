@@ -52,6 +52,12 @@ func TestError(t *testing.T) {
 	_ = res.Error()
 }
 
+func TestUnauthorized(t *testing.T) {
+	res := Factory()
+	res.Unauthorized("Testing")
+	_ = res.Error()
+}
+
 func BenchmarkResponse(b *testing.B) {
 	b.Run("success", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
