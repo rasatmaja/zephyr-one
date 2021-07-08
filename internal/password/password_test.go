@@ -107,7 +107,7 @@ func TestCompare(t *testing.T) {
 		}
 
 		match, err := pwd.Compare(wrong, hash)
-		if err == nil || match {
+		if err != nil || match {
 			t.Fail()
 		}
 	})
