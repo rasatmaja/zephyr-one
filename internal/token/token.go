@@ -1,19 +1,22 @@
 package token
 
 import (
-	"context"
-
-	"github.com/gbrlsnchs/jwt/v3"
+	"github.com/rasatmaja/zephyr-one/internal/token/basic"
+	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 )
-
-// IToken define interface
-type IToken interface {
-	Sign(ctx context.Context, payload Payload) error
-	Verify(ctx context.Context, token string) (error, Payload)
-}
-
-// Payload define JWT field
-type Payload struct{ jwt.Payload }
 
 // Token is a JWT struct
 type Token struct{}
+
+// Factory is a function to build JWT
+func Factory() contract.IToken {
+	// value of TokenType should be replace with env value
+	TokenType := "BASIC"
+
+	switch TokenType {
+	case "BASIC":
+		return basic.New()
+	default:
+		return basic.New()
+	}
+}
