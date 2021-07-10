@@ -2,6 +2,7 @@ package basic
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gbrlsnchs/jwt/v3"
@@ -38,6 +39,20 @@ func (t *Token) Sign(ctx context.Context, payload *contract.Payload) (string, er
 func (t *Token) Verify(ctx context.Context, token string) (*contract.Payload, error) {
 	payload := &contract.Payload{}
 	_, err := jwt.Verify([]byte(token), t.signature, payload)
+
+	// validate jwt payload
+	if time.Now().After(payload.ExpirationTime.Time) {
+		return nil, fmt.Errorf("token expired")
+	}
+
+	if time.Now().Before(payload.IssuedAt.Time) {
+		return nil, fmt.Errorf("token issued from future")
+	}
+
+	if time.Now().Before(payload.NotBefore.Time) {
+		return nil, fmt.Errorf("token cannot be use right now")
+	}
+
 	return payload, err
 }
 

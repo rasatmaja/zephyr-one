@@ -30,4 +30,26 @@ func TestToken(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotEqual(t, 0, len(jwt))
 	})
+
+	t.Run("Verify", func(t *testing.T) {
+		ctx, cancle := context.WithTimeout(context.Background(), 200*time.Millisecond)
+		defer cancle()
+
+		tkn := Factory()
+		time := contract.TimeNow()
+
+		payload := &contract.Payload{
+			JWTID:          uuid.NewString(),
+			IssuedAt:       time,
+			NotBefore:      time,
+			ExpirationTime: time.AddDates(0, 0, 30),
+		}
+
+		jwt, err := tkn.Sign(ctx, payload)
+		jwtPayload, err := tkn.Verify(ctx, jwt)
+
+		t.Log(jwtPayload)
+		assert.NoError(t, err)
+		assert.NotEqual(t, 0, len(jwt))
+	})
 }
