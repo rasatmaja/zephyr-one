@@ -46,6 +46,12 @@ type ENV struct {
 	DBPostgresPassword string `mapstructure:"DB_PG_PASSWORD"`
 	DBPostgresDatabase string `mapstructure:"DB_PG_DATABASE"`
 	DBPostgresSSLMode  string `mapstructure:"DB_PG_SSLMODE"`
+
+	// TOKEN JWT
+	TokenType    string `mapstructure:"TOKEN_TYPE"`
+	TokenSignKey string `mapstructure:"TOKEN_SIGN_KEY"`
+	TokenSignAlg string `mapstructure:"TOKEN_SIGN_ALG"`
+	TokenIssuer  string `mapstructure:"TOKEN_ISSUER"`
 }
 
 // LoadENV ...
@@ -68,6 +74,7 @@ func (cfg *Config) BuildENV() *ENV {
 		ServerProduction: false,
 		LogLevel:         "TRACE",
 		LogOutput:        "CMD",
+		TokenSignKey:     "secret",
 	}
 
 	vpr := GetViper()

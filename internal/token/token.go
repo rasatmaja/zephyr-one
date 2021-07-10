@@ -1,6 +1,7 @@
 package token
 
 import (
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/token/basic"
 	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 )
@@ -10,18 +11,18 @@ type Token struct{}
 
 // Factory is a function to build JWT
 func Factory() contract.IToken {
-	// TODO: value of TokenType should be replace with env value
-	TokenType := "BASIC"
+
+	env := config.LoadENV()
 
 	// build token config
 	token := &contract.Token{
 		// TODO: value should be replace with env
-		Issuer:  "account.rasio.dev",
-		SignKey: "secret",
-		SignAlg: "HS265",
+		Issuer:  env.TokenIssuer,
+		SignKey: env.TokenSignKey,
+		SignAlg: contract.SignAlgorithm(env.TokenSignAlg),
 	}
 
-	switch TokenType {
+	switch env.TokenType {
 	case "BASIC":
 		return basic.New(token)
 	default:
