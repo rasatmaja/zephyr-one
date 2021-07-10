@@ -10,13 +10,21 @@ type Token struct{}
 
 // Factory is a function to build JWT
 func Factory() contract.IToken {
-	// value of TokenType should be replace with env value
+	// TODO: value of TokenType should be replace with env value
 	TokenType := "BASIC"
+
+	// build token config
+	token := &contract.Token{
+		// TODO: value should be replace with env
+		Issuer:  "account.rasio.dev",
+		SignKey: "secret",
+		SignAlg: "HS265",
+	}
 
 	switch TokenType {
 	case "BASIC":
-		return basic.New()
+		return basic.New(token)
 	default:
-		return basic.New()
+		return basic.New(token)
 	}
 }
