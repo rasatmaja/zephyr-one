@@ -28,6 +28,7 @@ func New(token *contract.Token) *Token {
 
 // Sign is a function to signning JWT
 func (t *Token) Sign(ctx context.Context, payload *contract.Payload) (string, error) {
+	payload.Issuer = t.Issuer
 	token, err := jwt.Sign(payload, t.signature)
 	if err != nil {
 		return "", err
@@ -51,6 +52,10 @@ func (t *Token) Verify(ctx context.Context, token string) (*contract.Payload, er
 
 	if time.Now().Before(payload.NotBefore.Time) {
 		return nil, fmt.Errorf("token cannot be use right now")
+	}
+
+	if t.Issuer != payload.Issuer {
+		return nil, fmt.Errorf("Issuer not match, got: %s", payload.Issuer)
 	}
 
 	return payload, err
