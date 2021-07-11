@@ -9,6 +9,8 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/password"
 	"github.com/rasatmaja/zephyr-one/internal/response"
+	"github.com/rasatmaja/zephyr-one/internal/token"
+	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 )
 
 // Endpoint ...
@@ -16,6 +18,7 @@ type Endpoint struct {
 	log      *logger.Logger
 	repo     repository.IRepository
 	password password.IPassword
+	token    contract.IToken
 }
 
 // New is afunction to create handle instance
@@ -24,6 +27,7 @@ func New() *Endpoint {
 		log:      logger.New(),
 		repo:     database.Factory(),
 		password: password.Factory(),
+		token:    token.Factory(),
 	}
 }
 
