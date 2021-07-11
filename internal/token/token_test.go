@@ -6,12 +6,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestToken(t *testing.T) {
+	env := config.LoadENV()
 	t.Run("Sign", func(t *testing.T) {
+		env.TokenType = "BASIC"
 		ctx, cancle := context.WithTimeout(context.Background(), 200*time.Millisecond)
 		defer cancle()
 
@@ -26,12 +29,12 @@ func TestToken(t *testing.T) {
 		}
 
 		jwt, err := tkn.Sign(ctx, payload)
-		t.Log(jwt)
 		assert.NoError(t, err)
 		assert.NotEqual(t, 0, len(jwt))
 	})
 
 	t.Run("Verify", func(t *testing.T) {
+		env.TokenType = "UNKNOWN"
 		ctx, cancle := context.WithTimeout(context.Background(), 200*time.Millisecond)
 		defer cancle()
 
@@ -46,9 +49,8 @@ func TestToken(t *testing.T) {
 		}
 
 		jwt, err := tkn.Sign(ctx, payload)
-		jwtPayload, err := tkn.Verify(ctx, jwt)
+		_, err = tkn.Verify(ctx, jwt)
 
-		t.Log(jwtPayload)
 		assert.NoError(t, err)
 		assert.NotEqual(t, 0, len(jwt))
 	})
