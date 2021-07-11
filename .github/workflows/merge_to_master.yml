@@ -2,6 +2,8 @@ name: Zephyr One - Merge to Master
 
 on: 
   push:
+    paths:
+      - "**/*.go"
     branches:
       - master
       - main

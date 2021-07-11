@@ -1,6 +1,12 @@
 name: Zephyr One - Pull Request
 
-on: [pull_request]
+on: 
+  pull_request:
+    branches:
+      - master
+      - main
+    paths:
+      - "**/*.go"
 
 jobs:
   linting-unit-test:
@@ -24,10 +30,17 @@ jobs:
     - name: Running Unit Test
       run: |
         go test ./... -cover -vet -all -short -covermode=count -coverprofile=cover.out
-    - name: Generate code coverage    
+    - name: Check Git Diff test file 
+      uses: technote-space/get-diff-action@v4
+      with:
+        PATTERNS: |
+          +(internal|pkg)/**/*_test.go  
+    - name: Generate code coverage 
+      if: env.GIT_DIFF   
       run: |
         go tool cover -func cover.out -o coverage.out
     - name: 'Upload Go code coverage artifact'
+      if: env.GIT_DIFF
       uses: actions/upload-artifact@v2
       with:
         name: coverage
@@ -37,6 +50,7 @@ jobs:
   publish-code-coverage:
     name: Publish Code Coverage
     needs: linting-unit-test
+    if: env.GIT_DIFF
     runs-on: ubuntu-latest
     steps:
       - name: Download coverage artifact
