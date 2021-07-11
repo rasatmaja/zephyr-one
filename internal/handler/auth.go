@@ -3,12 +3,18 @@ package handler
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/response"
+	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 )
 
 // AuthReq define a login request
 type AuthReq struct {
 	Username   string `json:"username"`
 	Passphrase string `json:"passphrase"`
+}
+
+// AuthRes define login response
+type AuthRes struct {
+	Token string `json:"token"`
 }
 
 // Auth is a handler to authentications process
@@ -45,5 +51,20 @@ func (e *Endpoint) Auth(c *fiber.Ctx) error {
 		return res.Unauthorized("Passphrase not match")
 	}
 
-	return res.Success()
+	// build jwt payloads
+	timestamp := contract.TimeNow()
+	payload := &contract.Payload{
+		Subject:        auth.Username,
+		JWTID:          auth.ID,
+		ExpirationTime: timestamp.AddDates(0, 0, 30),
+		NotBefore:      timestamp,
+		IssuedAt:       timestamp,
+	}
+	token, err := e.token.Sign(c.Context(), payload)
+	if err != nil {
+		fLog.Error().Msgf("token build error, got: %v", err)
+		return res.InternalServerError("failed to build JWT token")
+	}
+
+	return res.Success("User successfully authenticate").SetData(&AuthRes{Token: token})
 }
