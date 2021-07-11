@@ -33,11 +33,12 @@ jobs:
       run: |
         go test ./... -cover -vet -all -short -covermode=count -coverprofile=cover.out
     - name: Check Git Diff test file 
-      id: gitdiff
       uses: technote-space/get-diff-action@v4
       with:
         PATTERNS: |
-          +(internal|pkg)/**/*_test.go  
+          +(internal|pkg)/**/*_test.go
+    - name: Set gitdiff outputs
+      id: gitdiff
       run: echo "::set-output name=istest::${{ env.GIT_DIFF }}"    
     - name: Generate code coverage 
       if: env.GIT_DIFF   
