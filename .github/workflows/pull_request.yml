@@ -10,6 +10,8 @@ on:
 
 jobs:
   linting-unit-test:
+    outputs:
+      gitdiffs: ${{ steps.gitdiff.outputs.istest }}
     name: Go Lint and Unit Test
     runs-on: ubuntu-latest
     steps:
@@ -31,10 +33,12 @@ jobs:
       run: |
         go test ./... -cover -vet -all -short -covermode=count -coverprofile=cover.out
     - name: Check Git Diff test file 
+      id: gitdiff
       uses: technote-space/get-diff-action@v4
       with:
         PATTERNS: |
           +(internal|pkg)/**/*_test.go  
+      run: echo "::set-output name=istest::${{ env.GIT_DIFF }}"    
     - name: Generate code coverage 
       if: env.GIT_DIFF   
       run: |
@@ -50,19 +54,21 @@ jobs:
   publish-code-coverage:
     name: Publish Code Coverage
     needs: linting-unit-test
-    if: env.GIT_DIFF
     runs-on: ubuntu-latest
     steps:
       - name: Download coverage artifact
+        if: ${{ needs.linting-unit-test.outputs.gitdiffs }}
         uses: actions/download-artifact@v2
         with:
           name: coverage
       - name: Display code coverage
+        if: ${{ needs.linting-unit-test.outputs.gitdiffs }}
         shell: bash
         run: |
           ls
           cat coverage.out
       - name: Publish code coverage into PR
+        if: ${{ needs.linting-unit-test.outputs.gitdiffs }}
         uses: actions/github-script@v4
         with:
           script: |
