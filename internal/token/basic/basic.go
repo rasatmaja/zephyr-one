@@ -33,10 +33,7 @@ func (t *Token) Sign(ctx context.Context, payload *contract.Payload) (string, er
 		return "", err
 	}
 
-	err = t.setTimestamps(ctx, payload)
-	if err != nil {
-		return "", err
-	}
+	t.setTimestamps(ctx, payload)
 
 	token, err := jwt.Sign(payload, t.signature)
 	if err != nil {
