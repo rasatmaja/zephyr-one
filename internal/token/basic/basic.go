@@ -47,6 +47,10 @@ func (t *Token) Verify(ctx context.Context, token string) (*contract.Payload, er
 	payload := &contract.Payload{}
 	_, err := jwt.Verify([]byte(token), t.signature, payload)
 
+	if err != nil {
+		return nil, err
+	}
+
 	// validate jwt payload
 	if time.Now().After(payload.ExpirationTime.Time) {
 		return nil, contract.ErrExp
