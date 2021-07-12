@@ -28,6 +28,12 @@ func New(token *contract.Token) *Token {
 // Sign is a function to signning JWT
 func (t *Token) Sign(ctx context.Context, payload *contract.Payload) (string, error) {
 	payload.Issuer = t.Issuer
+
+	err := t.setTimestamps(ctx, payload)
+	if err != nil {
+		return "", err
+	}
+
 	token, err := jwt.Sign(payload, t.signature)
 	if err != nil {
 		return "", err
@@ -69,4 +75,13 @@ func (t *Token) buildSignature(ctx context.Context) {
 	default:
 		t.signature = jwt.NewHS256([]byte(t.SignKey))
 	}
+}
+
+func (t *Token) setTimestamps(ctc context.Context, payload *contract.Payload) error {
+	timestamp := contract.TimeNow()
+	payload.ExpirationTime = timestamp.AddDates(0, 0, 30)
+	payload.NotBefore = timestamp
+	payload.IssuedAt = timestamp
+
+	return nil
 }

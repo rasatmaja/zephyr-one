@@ -52,13 +52,9 @@ func (e *Endpoint) Auth(c *fiber.Ctx) error {
 	}
 
 	// build jwt payloads
-	timestamp := contract.TimeNow()
 	payload := &contract.Payload{
-		Subject:        auth.Username,
-		JWTID:          auth.ID,
-		ExpirationTime: timestamp.AddDates(0, 0, 30),
-		NotBefore:      timestamp,
-		IssuedAt:       timestamp,
+		Subject: auth.Username,
+		JWTID:   auth.ID,
 	}
 	token, err := e.token.Sign(c.Context(), payload)
 	if err != nil {
