@@ -2,6 +2,7 @@ package config
 
 import (
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/viper"
@@ -49,4 +50,40 @@ func (vpr *Viper) IsFileNotFoundError(err error) bool {
 		return true
 	}
 	return false
+}
+
+// FillDefault is a function to fill struct with value from struc tag `default`
+func (vpr *Viper) FillDefault(iface interface{}) error {
+	ifv := reflect.ValueOf(iface)
+	if ifv.Kind() == reflect.Ptr {
+		ifv = ifv.Elem()
+	}
+	for i := 0; i < ifv.NumField(); i++ {
+		v := ifv.Field(i)
+		t := ifv.Type().Field(i)
+		tv, ok := t.Tag.Lookup("default")
+		if !ok {
+			continue
+		}
+
+		switch v.Kind() {
+		case reflect.String:
+			ifv.Field(i).SetString(tv)
+		case reflect.Bool:
+			v, err := strconv.ParseBool(tv)
+			if err != nil {
+				continue
+			}
+			ifv.Field(i).SetBool(v)
+		case reflect.Int:
+			v, err := strconv.ParseInt(tv, 10, 32)
+			if err != nil {
+				continue
+			}
+			ifv.Field(i).SetInt(v)
+		default:
+			continue
+		}
+	}
+	return nil
 }
