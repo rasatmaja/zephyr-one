@@ -27,9 +27,13 @@ func New(token *contract.Token) *Token {
 
 // Sign is a function to signning JWT
 func (t *Token) Sign(ctx context.Context, payload *contract.Payload) (string, error) {
-	payload.Issuer = t.Issuer
 
-	err := t.setTimestamps(ctx, payload)
+	err := t.setIssuer(ctx, payload)
+	if err != nil {
+		return "", err
+	}
+
+	err = t.setTimestamps(ctx, payload)
 	if err != nil {
 		return "", err
 	}
@@ -83,5 +87,13 @@ func (t *Token) setTimestamps(ctc context.Context, payload *contract.Payload) er
 	payload.NotBefore = timestamp
 	payload.IssuedAt = timestamp
 
+	return nil
+}
+
+func (t *Token) setIssuer(ctc context.Context, payload *contract.Payload) error {
+	if len(t.Issuer) == 0 {
+		return contract.ErrEmptyIss
+	}
+	payload.Issuer = t.Issuer
 	return nil
 }

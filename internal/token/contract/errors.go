@@ -14,4 +14,7 @@ var (
 
 	// ErrIss define error for mismatch issuer
 	ErrIss = errors.New("Issuer not match")
+
+	// ErrEmptyIss define error for empty issuer
+	ErrEmptyIss = errors.New("Issuer empty")
 )

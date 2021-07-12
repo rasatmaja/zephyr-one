@@ -75,6 +75,7 @@ func (cfg *Config) BuildENV() *ENV {
 		LogLevel:         "TRACE",
 		LogOutput:        "CMD",
 		TokenSignKey:     "secret",
+		TokenIssuer:      "zeprhyr-one",
 	}
 
 	vpr := GetViper()
