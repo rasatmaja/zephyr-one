@@ -19,39 +19,39 @@ type Config struct {
 // ENV is a stuct to hold all environemnt variable for this app
 type ENV struct {
 	// Server
-	ServerHost       string `mapstructure:"SERVER_HOST"`
-	ServerPort       int    `mapstructure:"SERVER_PORT"`
-	ServerReadTO     int    `mapstructure:"SERVER_READ_TIMEOUT"`
-	ServerWriteTO    int    `mapstructure:"SERVER_WRITE_TIMEOUT"`
-	ServerIdleTO     int    `mapstructure:"SERVER_IDLE_TIMEOUT"`
-	ServerProduction bool   `mapstructure:"SERVER_PRODUCTION"`
+	ServerHost       string `mapstructure:"SERVER_HOST" default:"localhost"`
+	ServerPort       int    `mapstructure:"SERVER_PORT" default:"2929"`
+	ServerReadTO     int    `mapstructure:"SERVER_READ_TIMEOUT" default:"10"`
+	ServerWriteTO    int    `mapstructure:"SERVER_WRITE_TIMEOUT" default:"10"`
+	ServerIdleTO     int    `mapstructure:"SERVER_IDLE_TIMEOUT" default:"10"`
+	ServerProduction bool   `mapstructure:"SERVER_PRODUCTION" default:"false"`
 
 	//TLS
-	TLS bool `mapstructure:"TLS"`
+	TLS bool `mapstructure:"TLS" default:"false"`
 
 	// LOG
-	LogLevel  string `mapstructure:"LOG_LEVEL"`  // TRACE, DEBUG, INFO, ERROR
-	LogOutput string `mapstructure:"LOG_OUTPUT"` // CMD, JSON
+	LogLevel  string `mapstructure:"LOG_LEVEL" default:"ERROR"` // TRACE, DEBUG, INFO, ERROR
+	LogOutput string `mapstructure:"LOG_OUTPUT" default:"CMD"`  // CMD, JSON
 
 	// DABATASE
-	DatabaseType        string `mapstructure:"DB_TYPE"`
-	DatabaseMaxIDLE     int    `mapstructure:"DB_MAX_IDLE"`     // 25
-	DatabaseMaxOpen     int    `mapstructure:"DB_MAX_OPEN"`     // 25
-	DatabaseMaxLifetime int    `mapstructure:"DB_MAX_LIFETIME"` // IN MINUTES
+	DatabaseType        string `mapstructure:"DB_TYPE" default:"POSTGRESQL"`
+	DatabaseMaxIDLE     int    `mapstructure:"DB_MAX_IDLE" default:"25"`     // 25
+	DatabaseMaxOpen     int    `mapstructure:"DB_MAX_OPEN" default:"25"`     // 25
+	DatabaseMaxLifetime int    `mapstructure:"DB_MAX_LIFETIME" default:"10"` // IN MINUTES
 
 	// DATABASE POSTGRESQL
-	DBPostgresHost     string `mapstructure:"DB_PG_HOST"`
-	DBPostgresPort     int    `mapstructure:"DB_PG_PORT"`
-	DBPostgresUsername string `mapstructure:"DB_PG_USER"`
-	DBPostgresPassword string `mapstructure:"DB_PG_PASSWORD"`
-	DBPostgresDatabase string `mapstructure:"DB_PG_DATABASE"`
-	DBPostgresSSLMode  string `mapstructure:"DB_PG_SSLMODE"`
+	DBPostgresHost     string `mapstructure:"DB_PG_HOST" default:"localhost"`
+	DBPostgresPort     int    `mapstructure:"DB_PG_PORT" default:"5432"`
+	DBPostgresUsername string `mapstructure:"DB_PG_USER" default:"root"`
+	DBPostgresPassword string `mapstructure:"DB_PG_PASSWORD" default:"root"`
+	DBPostgresDatabase string `mapstructure:"DB_PG_DATABASE" default:"zepheryone"`
+	DBPostgresSSLMode  string `mapstructure:"DB_PG_SSLMODE" default:"disable"`
 
 	// TOKEN JWT
-	TokenType    string `mapstructure:"TOKEN_TYPE"`
-	TokenSignKey string `mapstructure:"TOKEN_SIGN_KEY"`
-	TokenSignAlg string `mapstructure:"TOKEN_SIGN_ALG"`
-	TokenIssuer  string `mapstructure:"TOKEN_ISSUER"`
+	TokenType    string `mapstructure:"TOKEN_TYPE" default:"BASIC"`
+	TokenSignKey string `mapstructure:"TOKEN_SIGN_KEY" default:"secret"`
+	TokenSignAlg string `mapstructure:"TOKEN_SIGN_ALG" default:"HS256"`
+	TokenIssuer  string `mapstructure:"TOKEN_ISSUER" default:"zephery-one"`
 }
 
 // LoadENV ...
@@ -70,19 +70,14 @@ func LoadENV() *ENV {
 
 // BuildENV ...
 func (cfg *Config) BuildENV() *ENV {
-	env := &ENV{
-		ServerProduction: false,
-		LogLevel:         "TRACE",
-		LogOutput:        "CMD",
-		TokenSignKey:     "secret",
-		TokenIssuer:      "zeprhyr-one",
-	}
+	env := &ENV{}
 
 	vpr := GetViper()
 	vpr.AddConfigPath(cfg.Path)
 	vpr.SetConfigName(cfg.Filename)
 	vpr.SetConfigType(cfg.Type)
 
+	vpr.FillDefault(env)
 	vpr.AutomaticEnv()
 	vpr.BindEnvs(env)
 
