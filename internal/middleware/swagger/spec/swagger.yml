@@ -15,7 +15,7 @@ info:
 externalDocs:
   description: Find out more about Zephry One Project
   url: 'https://github.com/rasatmaja/zephyr-one'
-basePath: /
+basePath: /api/v1
 tags:
   - name: Auth
     description: Access to authentication and authorization service
