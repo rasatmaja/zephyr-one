@@ -1,5 +1,7 @@
 package server
 
+import "github.com/gofiber/fiber/v2"
+
 // InitializeRoute is a function to define routes and it's handlers
 func (a *App) InitializeRoute() {
 	defer a.server.Use(a.handler.PageNotfound)
@@ -10,7 +12,12 @@ func (a *App) InitializeRoute() {
 
 	a.server.Get("/hello", a.handler.HelloWorld)
 
-	a.server.Post("/register", a.handler.Regitration)
+	api := a.server.Group("api")
+	a.v1(api)
+}
 
-	a.server.Post("/login", a.handler.Auth)
+func (a *App) v1(router fiber.Router) {
+	v1 := router.Group("v1")
+	v1.Post("/register", a.handler.Regitration)
+	v1.Post("/login", a.handler.Auth)
 }
