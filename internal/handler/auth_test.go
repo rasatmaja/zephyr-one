@@ -153,7 +153,7 @@ func TestAuth(t *testing.T) {
 		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
 	})
 
-	t.Run("error-create-token", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		// start repo mock
 		repo := &repository.Mock{}
 		repo.On("Auth", mock.Anything, mock.Anything).Return(&models.Auth{}, nil)
