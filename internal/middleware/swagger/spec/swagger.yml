@@ -66,7 +66,48 @@ paths:
                 example: created  
               message:
                 type: string
-                example: successfully registered  
+                example: successfully registered
+  /login:
+    post:
+      tags:
+        - Auth
+      consumes:
+        - application/json  
+      parameters:
+        - in: body
+          name: account
+          description: a request to authenticate a user credentials
+          schema:
+            type: object
+            required:
+              - username
+              - passphrase
+            properties:
+              username:
+                type: string
+                example: zephryone
+              passphrase:
+                type: string
+                example: mirror mirror on the wall what bird has widest wings     
+      responses:
+        '200':
+          description: a response when user successfully authenticate
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: user successfully authenticate
+              data:
+                type: object
+                example:
+                  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6ZXBoZXJ5LW9uZSIsInN1YiI6InJhc2lvMjkiLCJleHAiOjE2Mjg3NjE3MjAsIm5iZiI6MTYyNjE2OTcyMCwiaWF0IjoxNjI2MTY5NzIwLCJqdGkiOiIwMmY5Zjc5Zi0xMWM2LTRhNmQtYjM4OC01NjRiM2RlMzc5ZDEifQ.EI22FGbfUpAEeqkS-vlCyYdxJg1CaxOTGIVvsHfBhhc            
   # End Authentication and Authorization
 # End Define Path
 
