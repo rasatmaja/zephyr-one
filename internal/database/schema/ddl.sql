@@ -3,6 +3,8 @@
 -- DROP Tables
 DROP TABLE IF EXISTS account_info;
 DROP TABLE IF EXISTS auth;
+DROP TABLE IF EXISTS contact_type;
+DROP TABLE IF EXISTS contacts;
 
 -- Create table auth
 CREATE TABLE auth (
@@ -21,4 +23,24 @@ CREATE TABLE account_info (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_id FOREIGN KEY (id) REFERENCES auth(id) ON DELETE CASCADE
+);
+
+-- Create table contact_type
+CREATE TABLE contact_type (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    slug VARCHAR(10) UNIQUE NOT NULL,
+    name VARCHAR(10) UNIQUE NOT NULL
+);
+
+-- Create seeder contact_type
+INSERT INTO contact_type(slug, name) VALUES ('email', 'E-MAIL'), ('phone', 'PHONE');
+
+-- Create table contacts
+CREATE TABLE contacts (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    auth_id uuid,
+    contact_type_id INT,
+    contact VARCHAR(200) NOT NULL,
+    CONSTRAINT fk_contact_type FOREIGN KEY(contact_type_id) REFERENCES contact_type(id),
+    CONSTRAINT fk_auth FOREIGN KEY(auth_id) REFERENCES auth(id)
 );
