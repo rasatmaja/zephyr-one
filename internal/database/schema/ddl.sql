@@ -1,10 +1,10 @@
 -- AUTHOR: Rasio Ganang Atmaja <rasioatmaja29@gmail.com>
 
 -- DROP Tables
+DROP TABLE IF EXISTS contacts;
 DROP TABLE IF EXISTS account_info;
 DROP TABLE IF EXISTS auth;
 DROP TABLE IF EXISTS contact_type;
-DROP TABLE IF EXISTS contacts;
 
 -- Create table auth
 CREATE TABLE auth (
@@ -41,6 +41,8 @@ CREATE TABLE contacts (
     auth_id uuid,
     contact_type_id INT,
     contact VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_contact_type FOREIGN KEY(contact_type_id) REFERENCES contact_type(id),
-    CONSTRAINT fk_auth FOREIGN KEY(auth_id) REFERENCES auth(id)
+    CONSTRAINT fk_auth FOREIGN KEY(auth_id) REFERENCES auth(id) ON DELETE CASCADE
 );
