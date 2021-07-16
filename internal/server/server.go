@@ -81,18 +81,7 @@ func (a *App) ServerListen() {
 	var err error
 	host := fmt.Sprintf("%s:%d", a.env.ServerHost, a.env.ServerPort)
 
-	if a.env.TLS {
-		cert, _ := a.utils.Cert.GenerateSelfSignedCertificates()
-
-		// Register certificate to asset registry for cleanup
-		a.utils.Assets.Register(utils.Asset{Path: cert.CertPath, Type: utils.AssetFile})
-		a.utils.Assets.Register(utils.Asset{Path: cert.KeyPath, Type: utils.AssetFile})
-
-		fmt.Println("[ SRVR ] Server using self-signed certificate")
-		err = a.server.ListenTLS(host, cert.CertPath, cert.KeyPath)
-	} else {
-		err = a.server.Listen(host)
-	}
+	err = a.server.Listen(host)
 
 	if err != nil {
 		panic(err)
