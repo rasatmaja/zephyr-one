@@ -22,6 +22,6 @@ func (a *App) v1(router fiber.Router) {
 	v1.Post("/login", a.handler.Auth)
 
 	user := v1.Group("user")
-	contact := user.Group("contact")
+	contact := user.Group("contact").Use(a.middleware.VerifyToken)
 	contact.Post("/", a.handler.AddContact)
 }
