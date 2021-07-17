@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/rasatmaja/zephyr-one/internal/config"
+	"github.com/rasatmaja/zephyr-one/internal/constant"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/token"
 	"github.com/rasatmaja/zephyr-one/internal/token/contract"
@@ -54,11 +55,11 @@ func (mdlwr *App) Initialize() {
 func (mdlwr *App) RequestID() {
 	fmt.Println("[ MDWR ] Initialize RequestID middleware")
 	mdlwr.server.Use(func(c *fiber.Ctx) error {
-		reqID := c.Get("X-Request-Id")
+		reqID := c.Get(constant.XRequestIDHTTPHeader)
 		if len(reqID) == 0 {
 			str := helper.NewStrings()
 			reqID, _ = str.GenerateRandomString(8)
-			c.Set("X-Request-Id", reqID)
+			c.Set(constant.XRequestIDHTTPHeader, reqID)
 		}
 		return c.Next()
 	})
@@ -76,11 +77,11 @@ func (mdlwr *App) TransactionID() {
 	fmt.Println("[ MDWR ] Initialize Transaction ID middleware")
 	mdlwr.server.Use(func(c *fiber.Ctx) error {
 		if c.Method() != "GET" {
-			trxID := c.Get("X-Transaction-Id")
+			trxID := c.Get(constant.XtransactionIDHTTPHeader)
 			if len(trxID) == 0 {
 				str := helper.NewStrings()
 				trxID, _ = str.GenerateRandomString(32)
-				c.Set("X-Transaction-Id", trxID)
+				c.Set(constant.XtransactionIDHTTPHeader, trxID)
 			}
 		}
 		return c.Next()

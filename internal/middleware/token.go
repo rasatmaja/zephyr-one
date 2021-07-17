@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/rasatmaja/zephyr-one/internal/constant"
 	"github.com/rasatmaja/zephyr-one/internal/response"
 )
 
@@ -13,7 +14,7 @@ func (mdlwr *App) VerifyToken(c *fiber.Ctx) error {
 	// build response
 	res := response.Factory()
 
-	authHeader := c.Get("Authorization")
+	authHeader := c.Get(constant.AuthHeader)
 	if len(authHeader) == 0 {
 		return res.Unauthorized("Authorization header empty")
 	}
@@ -33,7 +34,7 @@ func (mdlwr *App) VerifyToken(c *fiber.Ctx) error {
 		return res.Unauthorized(err.Error())
 	}
 
-	mdlwr.log.Info().Msgf("%v/n", payload)
+	c.Locals(constant.AuthIDContext, payload.JWTID)
 	return c.Next()
 
 }
