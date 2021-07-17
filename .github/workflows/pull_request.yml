@@ -36,7 +36,7 @@ jobs:
       uses: technote-space/get-diff-action@v4
       with:
         PATTERNS: |
-          +(internal|pkg)/**/*_test.go
+          +(internal|pkg|.github)/**/*_test.go
     - name: Set gitdiff outputs
       id: gitdiff
       run: echo "::set-output name=istest::${{ env.GIT_DIFF }}"    
