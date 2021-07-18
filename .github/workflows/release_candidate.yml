@@ -1,9 +1,9 @@
 name: Zephyr One - Release Candidate
 
-on: [pull_request]
-  # push:
-  #   tags:
-  #     - 'v*-rc'
+on: 
+  push:
+    tags:
+      - 'v*-rc'
 
 jobs:
   build-release:
@@ -12,12 +12,7 @@ jobs:
     steps:
     - name: Setup timezone to Asia/Jakarta
       run: |
-        sudo timedatectl set-timezone Asia/Jakarta
-    - name: Set outputs
-      id: vars
-      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-    - name: Check short SHA
-      run: echo ${{ steps.vars.outputs.sha_short }}  
+        sudo timedatectl set-timezone Asia/Jakarta  
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Create Release Cadidate
@@ -26,8 +21,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}.${{ steps.vars.outputs.sha_short }} 
-        release_name: ${{ github.ref }}.${{ steps.vars.outputs.sha_short }} 
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
         body: | 
 
         draft: false
