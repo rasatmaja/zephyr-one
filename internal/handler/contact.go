@@ -44,5 +44,5 @@ func (e *Endpoint) AddContact(c *fiber.Ctx) error {
 		return res.InternalServerError("unable adding contact")
 	}
 
-	return res.Success("successfully add contact").SetData(req)
+	return res.Success("successfully add contact")
 }
