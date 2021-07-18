@@ -9,14 +9,15 @@ jobs:
   build-release:
     name: Build Release Candidate
     runs-on: ubuntu-latest
-    env:
-      SHA8: ${{ GITHUB_SHA::8 }}
     steps:
     - name: Setup timezone to Asia/Jakarta
       run: |
         sudo timedatectl set-timezone Asia/Jakarta
-    - name: Check SHA8
-      run: echo {{ $SHA8 }}    
+    - name: Set outputs
+      id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - name: Check short SHA
+      run: echo ${{ steps.vars.outputs.sha_short }}  
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Create Release Cadidate
@@ -25,8 +26,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}.{{ $SHA8 }}
-        release_name: ${{ github.ref }}.{{ $SHA8 }}
+        tag_name: ${{ github.ref }}.${{ steps.vars.outputs.sha_short }} 
+        release_name: ${{ github.ref }}.${{ steps.vars.outputs.sha_short }} 
         body: | 
 
         draft: false
