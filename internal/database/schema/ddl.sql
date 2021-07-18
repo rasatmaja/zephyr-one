@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS contact_type;
 
 -- Create table auth
 CREATE TABLE auth (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id uuid PRIMARY KEY NOT NULL,
     username VARCHAR ( 50 ) UNIQUE NOT NULL,
     passphrase VARCHAR ( 200 ) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -27,7 +27,7 @@ CREATE TABLE account_info (
 
 -- Create table contact_type
 CREATE TABLE contact_type (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     slug VARCHAR(10) UNIQUE NOT NULL,
     name VARCHAR(10) UNIQUE NOT NULL
 );
@@ -37,7 +37,7 @@ INSERT INTO contact_type(slug, name) VALUES ('email', 'E-MAIL'), ('phone', 'PHON
 
 -- Create table contacts
 CREATE TABLE contacts (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     auth_id uuid,
     contact_type_id INT,
     contact VARCHAR(200) NOT NULL,
