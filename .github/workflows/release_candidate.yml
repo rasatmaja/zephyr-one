@@ -10,7 +10,7 @@ jobs:
     name: Build Release Candidate
     runs-on: ubuntu-latest
     env:
-      SHA8: ${GITHUB_SHA::8}
+      SHA8: ${{ GITHUB_SHA::8 }}
     steps:
     - name: Setup timezone to Asia/Jakarta
       run: |
