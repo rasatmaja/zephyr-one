@@ -51,3 +51,9 @@ func (m *Mock) Commit() error {
 	args := m.Called()
 	return args.Error(0)
 }
+
+// CreateContact mock
+func (m *Mock) CreateContact(ctx context.Context, contact *models.Contact) error {
+	args := m.Called(ctx, contact)
+	return args.Error(0)
+}

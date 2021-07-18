@@ -37,4 +37,7 @@ type IRepository interface {
 	//Account info repository
 	Account(ctx context.Context, id string) (*models.AccountInfo, error)
 	CreateAccountInfo(ctx context.Context, id, name string) (*models.AccountInfo, error)
+
+	// Contact reposiotry
+	CreateContact(ctx context.Context, contact *models.Contact) error
 }
