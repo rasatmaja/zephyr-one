@@ -1,9 +1,9 @@
 name: Zephyr One - Release Candidate
 
-on: 
-  push:
-    tags:
-      - 'v*-rc'
+on: [pull_request]
+  # push:
+  #   tags:
+  #     - 'v*-rc'
 
 jobs:
   build-release:
@@ -26,4 +26,23 @@ jobs:
         body: | 
 
         draft: false
-        prerelease: true  
+        prerelease: true
+  
+  deploy-app:   
+    needs: build-release
+    name: Deploy App
+    runs-on: ubuntu-latest
+    steps:
+    - name: Build GO App
+      run: |
+        make build-linux
+        ls  
+    - name: Deploy app into server via SSH
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "build/zephry-one-linux.app"
+        target: "/home/rasatmaj/zephryone.rasatmaja.com/test"      
