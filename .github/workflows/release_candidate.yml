@@ -1,6 +1,9 @@
 name: Zephyr One - Release Candidate
 
-on: [pull_request]
+on: 
+  push:
+    tags:
+      - 'v*-rc' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   build-release:
@@ -19,10 +22,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}-${{ github.sha }}
+        release_name: ${{ github.ref }}
         body: | 
-          Changes in this Release
-            - First Change
-            - Second Change
+
         draft: false
         prerelease: false  
