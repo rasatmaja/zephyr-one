@@ -1,0 +1,29 @@
+name: Zephyr One - Release Candidate
+
+on: 
+  push:
+    tags:
+      - 'v*-rc' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build-release:
+    name: Build Release Candidate
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup timezone to Asia/Jakarta
+      run: |
+        sudo timedatectl set-timezone Asia/Jakarta
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create Release Cadidate
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        body: | 
+
+        draft: false
+        prerelease: false  
