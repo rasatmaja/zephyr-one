@@ -53,9 +53,8 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
-        source: "${{ env.APP_NAME }}.app, Makefile, cmd/pm2/${{ env.APP_NAME }}.json"
+        source: "${{ env.APP_NAME }}.app, Makefile, ${{ env.APP_NAME }}.json"
         target: "/home/rasatmaj/zephryone.rasatmaja.com/"
-        strip_components: 2
     - name: Execute app into server via SSH
       uses: appleboy/ssh-action@master
       with:
