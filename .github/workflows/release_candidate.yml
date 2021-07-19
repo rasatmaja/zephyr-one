@@ -55,6 +55,15 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         source: "${{ env.APP_NAME }}.app, Makefile, ${{ env.APP_NAME }}.json"
         target: "/home/rasatmaj/zephryone.rasatmaja.com/"
+  execute-app:   
+    needs: deploy-app
+    name: Run App
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: zephyr-one
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2      
     - name: Execute app into server via SSH
       uses: appleboy/ssh-action@master
       with:
