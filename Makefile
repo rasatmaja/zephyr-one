@@ -1,7 +1,7 @@
 include .env
 export
 
-APP_NAME=zephry-one
+APP_NAME=zephyr-one
 
 GOPATH=$(shell go env GOPATH)
 GOOS=$(shell go env GOOS)

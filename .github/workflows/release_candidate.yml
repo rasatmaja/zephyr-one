@@ -1,6 +1,6 @@
 name: Zephyr One - Release Candidate
 
-on: 
+on:
   push:
     tags:
       - 'v*-rc'
@@ -36,16 +36,35 @@ jobs:
       APP_NAME: zephyr-one
       APP_MAIN_PATH: cmd/main/main.go
     steps:
+    - uses: chrnorm/deployment-action@releases/v1
+      name: Create GitHub deployment
+      id: deployment
+      with:
+        token: "${{ github.token }}"
+        target_url: https://zephryone.rasatmaja.com/docs/index.html
+        environment: Staging
+
     - name: Set up Go 1.16.x
       uses: actions/setup-go@v2
       with:
         go-version: ^1.16
       id: go
+
     - name: Checkout code
       uses: actions/checkout@v2
+
+    - name: Update deployment status (in-progress)
+      uses: chrnorm/deployment-status@releases/v1
+      with:
+        token: "${{ github.token }}"
+        target_url: https://zephryone.rasatmaja.com/docs/index.html
+        state: "in_progress"
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
     - name: Building Go Apps
       run: |
           go build -a -ldflags '-extldflags "-static"' -o ${{ env.APP_NAME }}.app ${{ env.APP_MAIN_PATH }} 
+
     - name: Deploy app into server via SSH
       uses: appleboy/scp-action@master
       with:
@@ -53,5 +72,35 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
-        source: ${{ env.APP_NAME }}.app
-        target: "/home/rasatmaj/zephryone.rasatmaja.com/test"      
+        source: "${{ env.APP_NAME }}.app, Makefile, ${{ env.APP_NAME }}.json"
+        target: "/home/rasatmaj/zephryone.rasatmaja.com/"
+
+    - name: Execute app into server via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/rasatmaj/zephryone.rasatmaja.com/
+          make deploy-domainesia
+
+    - name: Update deployment status (success)
+      if: success()
+      uses: chrnorm/deployment-status@releases/v1
+      with:
+        token: "${{ github.token }}"
+        target_url: https://zephryone.rasatmaja.com/docs/index.html
+        state: "success"
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+    - name: Update deployment status (failure)
+      if: failure()
+      uses: chrnorm/deployment-status@releases/v1
+      with:
+        token: "${{ github.token }}"
+        target_url: https://zephryone.rasatmaja.com/docs/index.html
+        state: "failure"
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}            
+     
