@@ -1,7 +1,7 @@
 {
     "apps" : [{
-        "name"    : "zephry-one",
-        "script"  : "./zephry-one.app",
+        "name"    : "zephyr-one",
+        "script"  : "./zephyr-one.app",
         "env"     : {}
     }]
 }
