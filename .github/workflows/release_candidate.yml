@@ -1,35 +1,35 @@
 name: Zephyr One - Release Candidate
 
-on:
-  push:
-    tags:
-      - 'v*-rc'
+on: [pull_request]
+  # push:
+  #   tags:
+  #     - 'v*-rc'
 
 jobs:
-  build-release:
-    name: Build Release Candidate
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup timezone to Asia/Jakarta
-      run: |
-        sudo timedatectl set-timezone Asia/Jakarta  
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Create Release Cadidate
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: ${{ github.ref }}
-        body: | 
+  # build-release:
+  #   name: Build Release Candidate
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Setup timezone to Asia/Jakarta
+  #     run: |
+  #       sudo timedatectl set-timezone Asia/Jakarta  
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #   - name: Create Release Cadidate
+  #     id: create_release
+  #     uses: actions/create-release@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       tag_name: ${{ github.ref }}
+  #       release_name: ${{ github.ref }}
+  #       body: | 
 
-        draft: false
-        prerelease: true
+  #       draft: false
+  #       prerelease: true
   
   deploy-app:   
-    needs: build-release
+    # needs: build-release
     name: Deploy App
     runs-on: ubuntu-latest
     env:
@@ -73,7 +73,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         source: "${{ env.APP_NAME }}.app, Makefile, ${{ env.APP_NAME }}.json"
-        target: "/home/rasatmaj/zephryone.rasatmaja.com/"
+        target: ${{ secrets.SSH_TARGET_PATH }}
 
     - name: Execute app into server via SSH
       uses: appleboy/ssh-action@master
@@ -83,7 +83,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /home/rasatmaj/zephryone.rasatmaja.com/
+          cd ${{ secrets.SSH_TARGET_PATH }}
           make deploy-domainesia
 
     - name: Update deployment status (success)
@@ -92,6 +92,7 @@ jobs:
       with:
         token: "${{ github.token }}"
         target_url: https://zephryone.rasatmaja.com/docs/index.html
+        environment_url: https://zephryone.rasatmaja.com/docs/index.html
         state: "success"
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
