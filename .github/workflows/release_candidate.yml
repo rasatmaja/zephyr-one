@@ -73,7 +73,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         source: "${{ env.APP_NAME }}.app, Makefile, ${{ env.APP_NAME }}.json"
-        target: "/home/rasatmaj/zephryone.rasatmaja.com/"
+        target: ${{ secrets.SSH_TARGET_PATH }}
 
     - name: Execute app into server via SSH
       uses: appleboy/ssh-action@master
@@ -83,7 +83,7 @@ jobs:
         password: ${{ secrets.SSH_PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /home/rasatmaj/zephryone.rasatmaja.com/
+          cd ${{ secrets.SSH_TARGET_PATH }}
           make deploy-domainesia
 
     - name: Update deployment status (success)
@@ -92,6 +92,7 @@ jobs:
       with:
         token: "${{ github.token }}"
         target_url: https://zephryone.rasatmaja.com/docs/index.html
+        environment_url: https://zephryone.rasatmaja.com/docs/index.html
         state: "success"
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
