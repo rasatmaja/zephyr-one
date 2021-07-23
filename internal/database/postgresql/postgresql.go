@@ -12,10 +12,11 @@ import (
 
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 )
 
 // Queries is extended type of database/Queries
-type Queries repository.Queries
+type Queries zosql.Queries
 
 // New is function to initialize progresql
 func New() *Queries {
@@ -74,7 +75,7 @@ func (qry *Queries) OpenConn() (*sql.DB, error) {
 }
 
 // BeginTX is a function to start transaction
-func (qry *Queries) BeginTX(ctx context.Context) (repository.IRepository, repository.ISQLTX, error) {
+func (qry *Queries) BeginTX(ctx context.Context) (repository.IRepository, zosql.ISQLTX, error) {
 	db, err := qry.OpenConn()
 	if err != nil {
 		return nil, nil, fmt.Errorf("Unable to open connection, got: %v", err)

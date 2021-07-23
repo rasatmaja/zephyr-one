@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -11,9 +12,9 @@ import (
 type Mock struct{ mock.Mock }
 
 // BeginTX mock
-func (m *Mock) BeginTX(ctx context.Context) (IRepository, ISQLTX, error) {
+func (m *Mock) BeginTX(ctx context.Context) (IRepository, zosql.ISQLTX, error) {
 	args := m.Called(ctx)
-	return args.Get(0).(IRepository), args.Get(1).(ISQLTX), args.Error(2)
+	return args.Get(0).(IRepository), args.Get(1).(zosql.ISQLTX), args.Error(2)
 }
 
 // Auth mock
