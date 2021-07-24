@@ -11,6 +11,7 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/password"
 	"github.com/rasatmaja/zephyr-one/internal/token/contract"
@@ -65,6 +66,28 @@ func TestAuth(t *testing.T) {
 		// begin assert response from http test
 		assert.NoError(t, err)
 		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
+	})
+
+	t.Run("user-not-found", func(t *testing.T) {
+		// start repo mock
+		repo := &repository.Mock{}
+		repo.On("Auth", mock.Anything, mock.Anything).Return(&models.Auth{}, zosql.ErrNotFound)
+		handler.repo = repo
+
+		// build body request
+		body := &AuthReq{
+			Username:   "test",
+			Passphrase: "test",
+		}
+
+		sbody, _ := json.Marshal(body)
+		req := httptest.NewRequest("POST", "/login", bytes.NewReader(sbody))
+		req.Header.Set("Content-Type", "application/json")
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusNotFound, resp.StatusCode)
 	})
 
 	t.Run("error-compare-password", func(t *testing.T) {

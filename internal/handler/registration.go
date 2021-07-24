@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/response"
 )
 
@@ -45,6 +46,9 @@ func (e *Endpoint) Regitration(c *fiber.Ctx) error {
 	if err != nil {
 		trx.Rollback()
 		fLog.Error().Msgf("unable insert to auth table error, got: %v", err)
+		if err == zosql.ErrDataDuplicate {
+			return res.BadRequest("Username already exist")
+		}
 		return res.InternalServerError("failed to create record in database")
 	}
 

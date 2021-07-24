@@ -12,6 +12,7 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 	"github.com/rasatmaja/zephyr-one/internal/database/sql"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/password"
 	"github.com/stretchr/testify/assert"
@@ -134,6 +135,41 @@ func TestRegistration(t *testing.T) {
 		// begin assert response from http test
 		assert.NoError(t, err)
 		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
+	})
+
+	t.Run("username-already-exist", func(t *testing.T) {
+
+		// start password mock
+		pwd := &password.Mock{}
+		pwd.On("Hash", mock.Anything).Return("", nil).Once()
+		handler.password = pwd
+
+		// start repo mock
+		repo := &repository.Mock{}
+		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, zosql.ErrDataDuplicate)
+
+		//start sql mock
+		zosql := &sql.Mock{}
+		zosql.On("Rollback").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, zosql, nil).Once()
+		handler.repo = repo
+
+		// build body request
+		body := &RegistrationRes{
+			Username:   "test-username",
+			Passphrase: "test-passphrase",
+			Name:       "test-name",
+		}
+		sbody, _ := json.Marshal(body)
+		req := httptest.NewRequest("POST", "/register", bytes.NewReader(sbody))
+		req.Header.Set("Content-Type", "application/json")
+
+		app.Post("/register", handler.Regitration)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusBadRequest, resp.StatusCode)
 	})
 
 	t.Run("error-create-account", func(t *testing.T) {
