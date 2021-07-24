@@ -12,7 +12,7 @@ func (qry *Queries) CreateContact(ctx context.Context, contact *models.Contact) 
 	_, err := qry.DB.ExecContext(ctx, "INSERT INTO contacts(auth_id, contact_type_id, contact) VALUES($1, $2, $3)", contact.AuthID, contact.ContactTypeID, contact.Contact)
 
 	if err != nil {
-		return err
+		return ParseInsertErr(err)
 	}
 
 	return nil
