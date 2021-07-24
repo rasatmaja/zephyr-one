@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gofiber/fiber/v2"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/response"
 	"github.com/rasatmaja/zephyr-one/internal/token/contract"
 )
@@ -36,6 +37,9 @@ func (e *Endpoint) Auth(c *fiber.Ctx) error {
 	auth, err := e.repo.Auth(c.Context(), req.Username)
 	if err != nil {
 		fLog.Error().Msgf("Auth error, got: %v", err)
+		if err == zosql.ErrNotFound {
+			return res.NotFound("Username not found")
+		}
 		return res.InternalServerError("unable get auth data from database")
 	}
 

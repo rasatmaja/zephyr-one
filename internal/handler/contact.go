@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/constant"
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
+	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/response"
 )
 
@@ -41,6 +42,9 @@ func (e *Endpoint) AddContact(c *fiber.Ctx) error {
 	err = e.repo.CreateContact(c.Context(), contact)
 	if err != nil {
 		fLog.Error().Msgf("unable adding contact [%s] on [%s] , got: %v", req.Contact, authID, err)
+		if err == zosql.ErrDataDuplicate {
+			return res.BadRequest("contact already exist")
+		}
 		return res.InternalServerError("unable adding contact")
 	}
 
