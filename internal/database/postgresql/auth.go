@@ -43,7 +43,7 @@ func (qry *Queries) Auth(ctx context.Context, username string) (*models.Auth, er
 	// scan all column and put the value into var
 	err := row.Scan(fields...)
 	if err != nil {
-		return nil, err
+		return nil, ParseReadErr(err)
 	}
 
 	return auth, nil

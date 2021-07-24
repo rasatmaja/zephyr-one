@@ -13,7 +13,7 @@ func (qry *Queries) CreateAccountInfo(ctx context.Context, id, name string) (*mo
 	// insert data into accoint_inf
 	_, err := qry.DB.ExecContext(ctx, "INSERT INTO account_info(id, name) VALUES($1, $2)", id, name)
 	if err != nil {
-		return nil, err
+		return nil, ParseInsertErr(err)
 	}
 
 	// build model account info
@@ -39,7 +39,7 @@ func (qry *Queries) Account(ctx context.Context, id string) (*models.AccountInfo
 	// scan all column and put the value into var
 	err := row.Scan(fields...)
 	if err != nil {
-		return nil, err
+		return nil, ParseReadErr(err)
 	}
 
 	return acc, nil
