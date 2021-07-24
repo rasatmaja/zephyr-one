@@ -11,6 +11,7 @@ import (
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/database/models"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
+	"github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
 	"github.com/rasatmaja/zephyr-one/internal/password"
 	"github.com/stretchr/testify/assert"
@@ -78,7 +79,8 @@ func TestRegistration(t *testing.T) {
 
 		// start repo mock
 		repo := &repository.Mock{}
-		repo.On("BeginTX", mock.Anything).Return(repo, repo, fmt.Errorf("error begin tx")).Once()
+		zosql := &sql.Mock{}
+		repo.On("BeginTX", mock.Anything).Return(repo, zosql, fmt.Errorf("error begin tx")).Once()
 		handler.repo = repo
 
 		// build body request
@@ -109,8 +111,11 @@ func TestRegistration(t *testing.T) {
 		// start repo mock
 		repo := &repository.Mock{}
 		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, fmt.Errorf("error create auth"))
-		repo.On("Rollback").Return(nil)
-		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+
+		//start sql mock
+		zosql := &sql.Mock{}
+		zosql.On("Rollback").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, zosql, nil).Once()
 		handler.repo = repo
 
 		// build body request
@@ -142,8 +147,11 @@ func TestRegistration(t *testing.T) {
 		repo := &repository.Mock{}
 		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil)
 		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, fmt.Errorf("error create account info"))
-		repo.On("Rollback").Return(nil)
-		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+
+		// start sql mock
+		zosql := &sql.Mock{}
+		zosql.On("Rollback").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, zosql, nil).Once()
 		handler.repo = repo
 		handler.repo = repo
 
@@ -176,8 +184,11 @@ func TestRegistration(t *testing.T) {
 		repo := &repository.Mock{}
 		repo.On("CreateAuth", mock.Anything, mock.Anything, mock.Anything).Return(&models.Auth{}, nil)
 		repo.On("CreateAccountInfo", mock.Anything, mock.Anything, mock.Anything).Return(&models.AccountInfo{}, nil)
-		repo.On("Commit").Return(nil)
-		repo.On("BeginTX", mock.Anything).Return(repo, repo, nil).Once()
+
+		// start sql mock
+		zosql := &sql.Mock{}
+		zosql.On("Commit").Return(nil)
+		repo.On("BeginTX", mock.Anything).Return(repo, zosql, nil).Once()
 		handler.repo = repo
 		handler.repo = repo
 

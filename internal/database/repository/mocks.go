@@ -41,18 +41,6 @@ func (m *Mock) CreateAccountInfo(ctx context.Context, id, name string) (*models.
 	return args.Get(0).(*models.AccountInfo), args.Error(1)
 }
 
-// Rollback Mock
-func (m *Mock) Rollback() error {
-	args := m.Called()
-	return args.Error(0)
-}
-
-// Commit Mock
-func (m *Mock) Commit() error {
-	args := m.Called()
-	return args.Error(0)
-}
-
 // CreateContact mock
 func (m *Mock) CreateContact(ctx context.Context, contact *models.Contact) error {
 	args := m.Called(ctx, contact)
