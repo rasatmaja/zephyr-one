@@ -50,3 +50,24 @@ func (e *Endpoint) AddContact(c *fiber.Ctx) error {
 
 	return res.Success("successfully add contact")
 }
+
+// AllContacts is a handler to get all user contacts
+func (e *Endpoint) AllContacts(c *fiber.Ctx) error {
+	fLog := e.log.With().Str("func", "AllContacts").Logger()
+
+	// build response
+	res := response.Factory()
+
+	var authID string
+	if c.Locals(constant.AuthIDContext) == nil {
+		return res.Unauthorized("user id empty")
+	}
+	authID = c.Locals(constant.AuthIDContext).(string)
+	contacs, err := e.repo.Contacts(c.Context(), authID)
+	if err != nil {
+		fLog.Error().Msgf("unable retrive contact [%s], got %s", authID, err)
+		return res.InternalServerError("unable get contact")
+	}
+
+	return res.Success().SetData(contacs)
+}
