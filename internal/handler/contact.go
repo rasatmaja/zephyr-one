@@ -51,8 +51,8 @@ func (e *Endpoint) AddContact(c *fiber.Ctx) error {
 	return res.Success("successfully add contact")
 }
 
-// AllContacts is a handler to get all user contacts
-func (e *Endpoint) AllContacts(c *fiber.Ctx) error {
+// Contact is a handler to get all user contacts
+func (e *Endpoint) Contact(c *fiber.Ctx) error {
 	fLog := e.log.With().Str("func", "AllContacts").Logger()
 
 	// build response
@@ -63,7 +63,11 @@ func (e *Endpoint) AllContacts(c *fiber.Ctx) error {
 		return res.Unauthorized("user id empty")
 	}
 	authID = c.Locals(constant.AuthIDContext).(string)
-	contacs, err := e.repo.Contacts(c.Context(), authID)
+
+	//get type params
+	types := c.Params("type")
+
+	contacs, err := e.repo.Contacts(c.Context(), authID, types)
 	if err != nil {
 		fLog.Error().Msgf("unable retrive contact [%s], got %s", authID, err)
 		return res.InternalServerError("unable get contact")

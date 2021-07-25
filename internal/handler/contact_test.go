@@ -124,7 +124,7 @@ func TestAddContact(t *testing.T) {
 	})
 }
 
-func TestAllContact(t *testing.T) {
+func TestContact(t *testing.T) {
 	env := config.LoadENV()
 	env.LogLevel = "disable" // disable logging
 
@@ -143,7 +143,7 @@ func TestAllContact(t *testing.T) {
 	defer app.Shutdown()
 
 	t.Run("error-empty-user-id", func(t *testing.T) {
-		app.Get("/contact", handler.AllContacts)
+		app.Get("/contact", handler.Contact)
 		req := httptest.NewRequest("GET", "/contact", nil)
 		resp, err := app.Test(req)
 
@@ -165,7 +165,7 @@ func TestAllContact(t *testing.T) {
 		repo.On("Contacts", mock.Anything, mock.Anything, mock.Anything).Return(contact, fmt.Errorf("Error DB"))
 		handler.repo = repo
 
-		app.Get("/contacts", handler.AllContacts)
+		app.Get("/contacts", handler.Contact)
 		req := httptest.NewRequest("GET", "/contacts", nil)
 		resp, err := app.Test(req)
 
@@ -181,7 +181,7 @@ func TestAllContact(t *testing.T) {
 		repo.On("Contacts", mock.Anything, mock.Anything, mock.Anything).Return(contact, nil)
 		handler.repo = repo
 
-		app.Get("/contacts", handler.AllContacts)
+		app.Get("/contacts", handler.Contact)
 		req := httptest.NewRequest("GET", "/contacts", nil)
 		resp, err := app.Test(req)
 
