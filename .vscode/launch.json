@@ -11,8 +11,7 @@
             "mode": "auto",
             "program": "${workspaceFolder}/cmd/main/main.go",
             "envFile": "${workspaceFolder}/.env",
-            "env": {},
-            "args": []
+            "args": ["-race"],
         }
     ]
 }
