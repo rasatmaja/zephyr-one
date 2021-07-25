@@ -24,13 +24,14 @@ func (c *Contact) MarshalJSON() ([]byte, error) {
 		IsPrimary bool   `json:"is_primary"`
 	}{
 		Contact:   c.Contact,
-		Types:     c.parseContactTypeID(),
+		Types:     c.ParseContactTypeID(),
 		IsPrimary: c.IsPrimary,
 	}
 	return json.Marshal(ctc)
 }
 
-func (c *Contact) parseContactTypeID() string {
+// ParseContactTypeID is a helper to define contact type bassed on its ID
+func (c *Contact) ParseContactTypeID() string {
 	switch c.ContactTypeID {
 	case "1":
 		return "email"
