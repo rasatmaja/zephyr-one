@@ -40,3 +40,15 @@ func (c *Contact) parseContactTypeID() string {
 		return ""
 	}
 }
+
+// ParseContactType is a helper to define contact type ID bassed on its slug
+func (c *Contact) ParseContactType(types string) {
+	switch types {
+	case "email":
+		c.ContactTypeID = "1"
+	case "phone":
+		c.ContactTypeID = "2"
+	default:
+		c.ContactTypeID = "1"
+	}
+}

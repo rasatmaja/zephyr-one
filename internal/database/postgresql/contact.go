@@ -30,8 +30,9 @@ func (qry *Queries) Contacts(ctx context.Context, authID string, types ...string
 
 	query := fmt.Sprintf("SELECT %s FROM %s WHERE auth_id = $1", columns, table)
 
-	if len(types) != 0 {
-		query = fmt.Sprintf("%s AND contact_type_id = %s", query, types)
+	if len(types) != 0 && len(types[0]) != 0 {
+		ctc.ParseContactType(types[0])
+		query = fmt.Sprintf("%s AND contact_type_id = %s", query, ctc.ContactTypeID)
 	}
 	rows, err := qry.DB.QueryContext(ctx, query, authID)
 	if err != nil {
