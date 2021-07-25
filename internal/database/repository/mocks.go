@@ -46,3 +46,9 @@ func (m *Mock) CreateContact(ctx context.Context, contact *models.Contact) error
 	args := m.Called(ctx, contact)
 	return args.Error(0)
 }
+
+// Contacts mocks
+func (m *Mock) Contacts(ctx context.Context, authID string, types ...string) ([]*models.Contact, error) {
+	args := m.Called(ctx, authID, types)
+	return args.Get(0).([]*models.Contact), args.Error(1)
+}

@@ -10,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/rasatmaja/zephyr-one/internal/config"
 	"github.com/rasatmaja/zephyr-one/internal/constant"
+	"github.com/rasatmaja/zephyr-one/internal/database/models"
 	"github.com/rasatmaja/zephyr-one/internal/database/repository"
 	zosql "github.com/rasatmaja/zephyr-one/internal/database/sql"
 	"github.com/rasatmaja/zephyr-one/internal/logger"
@@ -121,4 +122,72 @@ func TestAddContact(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, fiber.StatusOK, resp.StatusCode)
 	})
+}
+
+func TestAllContact(t *testing.T) {
+	env := config.LoadENV()
+	env.LogLevel = "disable" // disable logging
+
+	// setup handler
+	handler := &Endpoint{
+		log: logger.New(),
+	}
+
+	// setup fiber app
+	app := fiber.New(
+		fiber.Config{
+			ErrorHandler: handler.Error,
+		},
+	)
+
+	defer app.Shutdown()
+
+	t.Run("error-empty-user-id", func(t *testing.T) {
+		app.Get("/contact", handler.AllContacts)
+		req := httptest.NewRequest("GET", "/contact", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusUnauthorized, resp.StatusCode)
+	})
+
+	// mock custom middleware to set context value
+	app.Use(func(c *fiber.Ctx) error {
+		c.Locals(constant.AuthIDContext, "12345")
+		return c.Next()
+	})
+
+	t.Run("error-get-contact", func(t *testing.T) {
+		// start repo mock
+		repo := &repository.Mock{}
+		var contact []*models.Contact
+		repo.On("Contacts", mock.Anything, mock.Anything, mock.Anything).Return(contact, fmt.Errorf("Error DB"))
+		handler.repo = repo
+
+		app.Get("/contacts", handler.AllContacts)
+		req := httptest.NewRequest("GET", "/contacts", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
+	})
+
+	t.Run("success", func(t *testing.T) {
+		// start repo mock
+		repo := &repository.Mock{}
+		var contact []*models.Contact
+		repo.On("Contacts", mock.Anything, mock.Anything, mock.Anything).Return(contact, nil)
+		handler.repo = repo
+
+		app.Get("/contacts", handler.AllContacts)
+		req := httptest.NewRequest("GET", "/contacts", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusOK, resp.StatusCode)
+	})
+
 }

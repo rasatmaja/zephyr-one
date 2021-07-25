@@ -21,4 +21,5 @@ type IRepository interface {
 
 	// Contact reposiotry
 	CreateContact(ctx context.Context, contact *models.Contact) error
+	Contacts(ctx context.Context, authID string, types ...string) ([]*models.Contact, error)
 }
