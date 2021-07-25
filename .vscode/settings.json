@@ -8,17 +8,4 @@
     "go.coverOnSingleTest": true,
     "go.lintTool": "golint",
     "go.toolsManagement.autoUpdate": true,
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "zephry-one",
-            "group": "Docker",
-            "username": "root",
-            "password": "root",
-            "database": "zephryone"
-        }
-    ],
 }
