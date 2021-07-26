@@ -25,4 +25,5 @@ func (a *App) v1(router fiber.Router) {
 	contact := user.Group("contact").Use(a.middleware.VerifyToken)
 	contact.Post("/", a.handler.AddContact)
 	contact.Get("/:type?", a.handler.Contact)
+	contact.Put("/primary/:contact", a.handler.SetPrimaryContact)
 }
