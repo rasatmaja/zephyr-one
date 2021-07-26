@@ -191,3 +191,70 @@ func TestContact(t *testing.T) {
 	})
 
 }
+
+func TestSetPrimaryContact(t *testing.T) {
+	env := config.LoadENV()
+	env.LogLevel = "disable" // disable logging
+
+	// setup handler
+	handler := &Endpoint{
+		log: logger.New(),
+	}
+
+	// setup fiber app
+	app := fiber.New(
+		fiber.Config{
+			ErrorHandler: handler.Error,
+		},
+	)
+
+	defer app.Shutdown()
+
+	t.Run("error-empty-user-id", func(t *testing.T) {
+		app.Put("/contact/primary/:contact", handler.SetPrimaryContact)
+		req := httptest.NewRequest("PUT", "/contact/primary/test@test.test", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusUnauthorized, resp.StatusCode)
+	})
+
+	// mock custom middleware to set context value
+	app.Use(func(c *fiber.Ctx) error {
+		c.Locals(constant.AuthIDContext, "12345")
+		return c.Next()
+	})
+
+	t.Run("error-empty-user-id", func(t *testing.T) {
+
+		// start repo mock
+		repo := &repository.Mock{}
+		repo.On("SetPrimaryContact", mock.Anything, mock.Anything, mock.Anything).Return(fmt.Errorf("Error DB"))
+		handler.repo = repo
+
+		app.Put("/user/contact/primary/:contact", handler.SetPrimaryContact)
+		req := httptest.NewRequest("PUT", "/user/contact/primary/test@test.test", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusInternalServerError, resp.StatusCode)
+	})
+
+	t.Run("success", func(t *testing.T) {
+
+		// start repo mock
+		repo := &repository.Mock{}
+		repo.On("SetPrimaryContact", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+		handler.repo = repo
+
+		app.Put("/user/contact/primary/:contact", handler.SetPrimaryContact)
+		req := httptest.NewRequest("PUT", "/user/contact/primary/test@test.test", nil)
+		resp, err := app.Test(req)
+
+		// begin assert response from http test
+		assert.NoError(t, err)
+		assert.Equal(t, fiber.StatusOK, resp.StatusCode)
+	})
+}

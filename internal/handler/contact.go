@@ -75,3 +75,28 @@ func (e *Endpoint) Contact(c *fiber.Ctx) error {
 
 	return res.Success().SetData(contacs)
 }
+
+// SetPrimaryContact is a handler to update user primary contact
+func (e *Endpoint) SetPrimaryContact(c *fiber.Ctx) error {
+	fLog := e.log.With().Str("func", "SetPrimaryContact").Logger()
+
+	// build response
+	res := response.Factory()
+
+	var authID string
+	if c.Locals(constant.AuthIDContext) == nil {
+		return res.Unauthorized("user id empty")
+	}
+	authID = c.Locals(constant.AuthIDContext).(string)
+
+	//get contact params
+	contact := c.Params("contact")
+
+	err := e.repo.SetPrimaryContact(c.Context(), authID, contact)
+	if err != nil {
+		fLog.Error().Msgf("unable update contact [%s], got %s", authID, err)
+		return res.InternalServerError("unable get contact")
+	}
+
+	return res.Success()
+}

@@ -58,3 +58,12 @@ func (qry *Queries) Contacts(ctx context.Context, authID string, types ...string
 
 	return contacts, nil
 }
+
+// SetPrimaryContact is a repo to update user primary contact
+func (qry *Queries) SetPrimaryContact(ctx context.Context, authID, contact string) error {
+	_, err := qry.DB.ExecContext(ctx, "UPDATE contacts SET is_primary = (CASE contact WHEN $1 THEN TRUE ELSE FALSE END) WHERE auth_id = $2", contact, authID)
+	if err != nil {
+		return ParseInsertErr(err)
+	}
+	return nil
+}

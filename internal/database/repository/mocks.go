@@ -52,3 +52,9 @@ func (m *Mock) Contacts(ctx context.Context, authID string, types ...string) ([]
 	args := m.Called(ctx, authID, types)
 	return args.Get(0).([]*models.Contact), args.Error(1)
 }
+
+// SetPrimaryContact mocks
+func (m *Mock) SetPrimaryContact(ctx context.Context, authID, contact string) error {
+	args := m.Called(ctx, authID, contact)
+	return args.Error(0)
+}
