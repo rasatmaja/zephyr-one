@@ -19,6 +19,8 @@ basePath: /api/v1
 tags:
   - name: Auth
     description: Access to authentication and authorization service
+  - name: Contact
+    description: Access to user contact data  
 
 schemes:
   - http
@@ -109,21 +111,164 @@ paths:
                 example:
                   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6ZXBoZXJ5LW9uZSIsInN1YiI6InJhc2lvMjkiLCJleHAiOjE2Mjg3NjE3MjAsIm5iZiI6MTYyNjE2OTcyMCwiaWF0IjoxNjI2MTY5NzIwLCJqdGkiOiIwMmY5Zjc5Zi0xMWM2LTRhNmQtYjM4OC01NjRiM2RlMzc5ZDEifQ.EI22FGbfUpAEeqkS-vlCyYdxJg1CaxOTGIVvsHfBhhc            
   # End Authentication and Authorization
+  # Start contact
+  /user/contact:
+    post:
+      security:
+        - jwt: []      
+      tags:
+        - Contact
+      consumes:
+        - application/json  
+      parameters:
+        - in: body
+          name: contact
+          description: a request to add user contact
+          schema:
+            type: object
+            required:
+              - contact
+              - type
+            properties:
+              contact:
+                type: string
+                example: atmaja@rasio.dev
+              type:
+                type: string
+                example: email     
+      responses:
+        '200':
+          description: a response when user successfully add contact
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Contact
+      consumes:
+        - application/json  
+      responses:
+        '200':
+          description: a response when user successfully add contact
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success
+              data:
+                type: array
+                example: [
+                  {
+                    contact: atmaja@rasio.dev,
+                    type: email,
+                    is_primary: false
+                  }   
+                ]
+  /user/contact/{type}:
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Contact
+      consumes:
+        - application/json  
+      parameters:
+        - in: path 
+          type: string
+          name: type
+          description: a request to get user contact  
+          required: true
+      responses:
+        '200':
+          description: a response when user successfully add contact
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success
+              data:
+                type: array
+                example: [
+                  {
+                    contact: atmaja@rasio.dev,
+                    type: email,
+                    is_primary: false
+                  }   
+                ]                  
+  /user/contact/primary/{contact}:
+    put:
+      security:
+        - jwt: []
+      tags:
+        - Contact
+      consumes:
+        - application/json  
+      parameters:
+        - in: path
+          name: contact
+          description: a request to update user primary contact
+          type: string
+          required: true    
+      responses:
+        '200':
+          description: a response when user successfully update primary contact
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success   
+  # End contact                               
 # End Define Path
 
 # Start Secutiry Definition  
 securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+  jwt:
+    type: apiKey
+    name: Authorization 
+    in: header
   petstore_auth:
     type: oauth2
     authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
     flow: implicit
     scopes:
       'write:pets': modify pets in your account
-      'read:pets': read your pets
-  api_key:
-    type: apiKey
-    name: api_key
-    in: header
+      'read:pets': read your pets  
 # End Secutiry Definition      
 
 # Start Definition
