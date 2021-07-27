@@ -23,4 +23,5 @@ type IRepository interface {
 	CreateContact(ctx context.Context, contact *models.Contact) error
 	Contacts(ctx context.Context, authID string, types ...string) ([]*models.Contact, error)
 	SetPrimaryContact(ctx context.Context, authID, contact string) error
+	DeleteContact(ctx context.Context, authID, contact string) error
 }

@@ -249,6 +249,35 @@ paths:
               message:
                 type: string
                 example: success   
+  /user/contact/{contact}:
+    delete:
+      security:
+        - jwt: []
+      tags:
+        - Contact
+      consumes:
+        - application/json  
+      parameters:
+        - in: path
+          name: contact
+          description: a request to delete user contact
+          type: string
+          required: true    
+      responses:
+        '200':
+          description: a response when user successfully delete contact
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success   
   # End contact                               
 # End Define Path
 

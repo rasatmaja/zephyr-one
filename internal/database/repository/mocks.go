@@ -58,3 +58,9 @@ func (m *Mock) SetPrimaryContact(ctx context.Context, authID, contact string) er
 	args := m.Called(ctx, authID, contact)
 	return args.Error(0)
 }
+
+// DeleteContact mocks
+func (m *Mock) DeleteContact(ctx context.Context, authID, contact string) error {
+	args := m.Called(ctx, authID, contact)
+	return args.Error(0)
+}
