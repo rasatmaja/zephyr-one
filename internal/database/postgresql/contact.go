@@ -67,3 +67,12 @@ func (qry *Queries) SetPrimaryContact(ctx context.Context, authID, contact strin
 	}
 	return nil
 }
+
+// DeleteContact is repo to delete user contact
+func (qry *Queries) DeleteContact(ctx context.Context, authID, contact string) error {
+	_, err := qry.DB.ExecContext(ctx, "DELETE FROM contacts WHERE contact = $1 AND auth_id = $2", contact, authID)
+	if err != nil {
+		return ParseInsertErr(err)
+	}
+	return nil
+}

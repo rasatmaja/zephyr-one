@@ -26,4 +26,5 @@ func (a *App) v1(router fiber.Router) {
 	contact.Post("/", a.handler.AddContact)
 	contact.Get("/:type?", a.handler.Contact)
 	contact.Put("/:contact/primary", a.handler.SetPrimaryContact)
+	contact.Delete("/:contact", a.handler.RemoveContact)
 }

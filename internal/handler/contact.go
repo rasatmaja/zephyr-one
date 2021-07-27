@@ -100,3 +100,28 @@ func (e *Endpoint) SetPrimaryContact(c *fiber.Ctx) error {
 
 	return res.Success()
 }
+
+// RemoveContact is a handler to delete user contact
+func (e *Endpoint) RemoveContact(c *fiber.Ctx) error {
+	fLog := e.log.With().Str("func", "RemoveContact").Logger()
+
+	// build response
+	res := response.Factory()
+
+	var authID string
+	if c.Locals(constant.AuthIDContext) == nil {
+		return res.Unauthorized("user id empty")
+	}
+	authID = c.Locals(constant.AuthIDContext).(string)
+
+	//get contact params
+	contact := c.Params("contact")
+
+	err := e.repo.DeleteContact(c.Context(), authID, contact)
+	if err != nil {
+		fLog.Error().Msgf("unable delete contact [%s], got %s", contact, err)
+		return res.InternalServerError("unable delete contact")
+	}
+
+	return res.Success()
+}
