@@ -34,10 +34,10 @@ func (e *Endpoint) AddContact(c *fiber.Ctx) error {
 		authID = c.Locals(constant.AuthIDContext).(string)
 	}
 	contact := &models.Contact{
-		AuthID:        authID,
-		ContactTypeID: "1", // TODO: should replace baseed on request body
-		Contact:       req.Contact,
+		AuthID:  authID,
+		Contact: req.Contact,
 	}
+	contact.ParseContactType(req.Type)
 
 	err = e.repo.CreateContact(c.Context(), contact)
 	if err != nil {
