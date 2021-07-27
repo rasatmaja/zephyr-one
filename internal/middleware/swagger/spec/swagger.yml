@@ -220,7 +220,7 @@ paths:
                     is_primary: false
                   }   
                 ]                  
-  /user/contact/primary/{contact}:
+  /user/contact/{contact}/primary:
     put:
       security:
         - jwt: []
