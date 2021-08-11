@@ -17,16 +17,13 @@ jobs:
       uses: actions/checkout@v2
     - name: Create Release Cadidate
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: release-drafter/release-drafter@v5
       with:
-        tag_name: ${{ github.ref }}
-        release_name: ${{ github.ref }}
-        body: | 
-
-        draft: false
-        prerelease: true
+        config-name: release-drafter.yml
+        publish: true
+        disable-autolabeler: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
   
   deploy-app:   
     needs: build-release
