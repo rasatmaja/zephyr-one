@@ -21,6 +21,7 @@ jobs:
       with:
         config-name: release-drafter.yml
         publish: true
+        prerelease: true
         disable-autolabeler: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
