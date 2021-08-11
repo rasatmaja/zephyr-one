@@ -6,11 +6,17 @@ template: |
   $CHANGES
 categories:
   - title: 'Features'
-    label: 'feature'
+    labels: 
+      - 'feature'
+      - 'task'
+      - 'user stories'
+      - 'business flow'
   - title: 'Bug Fixes'
     label: 'bug'
   - title: 'Maintenance'
-    label: 'chore'
+    labels: 
+      - 'chore'
+      - 'spike'
   - title: 'Dependency Updates'
     label: 'dependencies'
 
