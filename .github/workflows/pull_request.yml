@@ -87,14 +87,11 @@ jobs:
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
                   repo: context.repo.repo,
-                  body: '## **Code Coverage Report** : \n' + '``` \n' + data + ' \n ```'
+                  body: body_msg + '\n' + '<details><summary><b>Code Coverage Report</b></summary><p>' + '\n\n' + '``` \n' + data + ' \n ``` \n' + '</p></details>'
                 }); 
 
-                github.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: body_msg
-                });
+                if (total < min) {
+                  core.setFailed('Code coverage doesnt meet minimum target');
+                }
             })
               
