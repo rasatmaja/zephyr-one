@@ -36,7 +36,7 @@ test-cover:
 	rm cover.out
 
 deploy-domainesia:
-	npx pm2 stop --silent ${APP_NAME} || :
-	npx pm2 delete --silent ${APP_NAME} || :
+	pm2 stop --silent ${APP_NAME} || :
+	pm2 delete --silent ${APP_NAME} || :
 	chmod +x ${APP_NAME}.app
-	npx pm2 start ${APP_NAME}.json
+	pm2 start ${APP_NAME}.json
