@@ -82,6 +82,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd ${{ secrets.SSH_TARGET_PATH }}
+          source /home/rasatmaj/nodevenv/12/bin/activate
           make deploy-domainesia
 
     - name: Update deployment status (success)
