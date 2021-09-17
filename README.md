@@ -1,5 +1,5 @@
 # Zephyr One
-A simple API that serving a users AAA (Authentication, Authorization , Accounting) service. The purpose of this project is create AAA service using Golang and also display a documentation of its API using Swagger UI. 
+An API that serving a users authentication service with swagger UI integration as API documentations.
 
 ![](https://img.shields.io/badge/Version-1.0.0-informational?style=flat&logo=<LOGO_NAME>&logoColor=white&color=2bbc8a)
 ![](https://img.shields.io/badge/Build-Sucess-informational?style=flat&logo=<LOGO_NAME>&logoColor=white&color=2bbc8a)
