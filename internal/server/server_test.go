@@ -64,7 +64,7 @@ func TestServer(t *testing.T) {
 func OSInterupt(t *testing.T) {
 	proc, err := os.FindProcess(os.Getpid())
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 		t.Fail()
 	}
 	time.Sleep(2 * time.Second)
