@@ -21,6 +21,8 @@ tags:
     description: Access to authentication and authorization service
   - name: Contact
     description: Access to user contact data  
+  - name: Info
+    description: Access to user informations    
 
 schemes:
   - http
@@ -278,7 +280,38 @@ paths:
               message:
                 type: string
                 example: success   
-  # End contact                               
+  # End contact
+  # Start Info
+  /user/info:
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Info
+      consumes:
+        - application/json  
+      responses:
+        '200':
+          description: a response when user successfully get user info
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 200
+              status:
+                type: string
+                example: success  
+              message:
+                type: string
+                example: success
+              data:
+                type: object
+                example: 
+                  name: Rasio Atmaja,
+                  photo: rasio.webp,
+                  registration_date: Friday 23, July 2021 22:49 WIB 
+  # End Info                               
 # End Define Path
 
 # Start Secutiry Definition  
