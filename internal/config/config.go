@@ -60,9 +60,7 @@ type ENV struct {
 func LoadENV() *ENV {
 	singleton.Do(func() {
 		fmt.Println("[ CNFG ] Starting ENV config ...")
-		config := &Config{
-			Path: ".env",
-		}
+		config := new(Config)
 		instance = config.BuildENV()
 	})
 	return instance
