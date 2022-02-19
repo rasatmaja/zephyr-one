@@ -25,3 +25,5 @@ On my journey to building this project I learned a few things like:
 ## License
 This project is licensed under the terms of the **MIT** license.
 >You can check out the full license [here](https://github.com/rasatmaja/zephyr-one/blob/main/LICENSE)   
+
+## Test
