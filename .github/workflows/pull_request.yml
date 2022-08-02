@@ -32,7 +32,7 @@ jobs:
         golint -set_exit_status ./...
     - name: Running Unit Test
       run: |
-        go test ./... -cover -vet -all -short -covermode=count -coverprofile=cover.out
+        go test ./... -cover -short -covermode=count -coverprofile=cover.out
     - name: Check Git Diff test file 
       uses: technote-space/get-diff-action@v4
       with:
