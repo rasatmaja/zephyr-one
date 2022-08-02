@@ -27,8 +27,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Lint code base
       run: |
-        go get golang.org/x/lint/golint
-        golint -set_exit_status ./...
+        go get golang.org/x/lint/golint && golint -set_exit_status ./...
     - name: Running Unit Test
       run: |
         go test ./... -cover -vet -all -short -covermode=count -coverprofile=cover.out
