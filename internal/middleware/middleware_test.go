@@ -103,8 +103,8 @@ func TestMiddleware(t *testing.T) {
 	})
 
 	t.Run("swagger/success", func(t *testing.T) {
-		resp, err := app.Test(httptest.NewRequest("GET", "/docs", nil))
-		resp, err = app.Test(httptest.NewRequest("GET", "/docs/", nil))
+		//resp, err := app.Test(httptest.NewRequest("GET", "/docs", nil))
+		resp, err := app.Test(httptest.NewRequest("GET", "/docs/", nil))
 
 		// begin assert response from http test
 		if instance == nil {
@@ -117,7 +117,7 @@ func TestMiddleware(t *testing.T) {
 			t.Fail()
 		}
 
-		if resp.StatusCode != fiber.StatusFound {
+		if resp.StatusCode != fiber.StatusOK {
 			t.Errorf("status code should be %d, but got %d", fiber.StatusFound, resp.StatusCode)
 			t.Fail()
 		}
