@@ -1,6 +1,6 @@
 module github.com/rasatmaja/zephyr-one
 
-go 1.18
+go 1.21
 
 require (
 	github.com/gbrlsnchs/jwt/v3 v3.0.1
