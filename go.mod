@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	github.com/gbrlsnchs/jwt/v3 v3.0.1
-	github.com/gofiber/fiber/v2 v2.52.11
+	github.com/gofiber/fiber/v2 v2.52.12
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v4 v4.18.2
 	github.com/rasatmaja/mura/v2 v2.1.1
